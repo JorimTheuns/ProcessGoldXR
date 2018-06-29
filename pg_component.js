@@ -1,5 +1,5 @@
-{
-	"graph" : {
+json = {
+	"graph": {
 		"FormatSettings": {
 			"DecimalSeparator": ",",
 			"MinDecimals": 0,
@@ -4305,3 +4305,98 @@
 		"errorStrings": []
 	}
 }
+
+AFRAME.registerComponent('pgvr', {
+	schema: {
+		scaleFactor: {type: 'number'}
+	},
+
+	init: function () {
+		var data = this.data;
+		var el = this.el;
+	},
+	update: function () {
+		var data = this.data;
+		var el = this.el;
+		var sceneEl = document.querySelector('a-scene');
+		var nodes = json.graph.nodes;
+		var edges = json.graph.edges;
+		
+		var cameraEl = document.querySelector('a-camera');
+		
+		cameraEl.setAttribute('position', {
+				x: 0,
+				y: 0,
+				z: 0
+			});
+
+		var nodeElementContainer = document.createElement('a-entity');
+		nodeElementContainer.setAttribute('position', {
+				x: 0-(json.graph.centralpoint.x/data.scaleFactor),
+				y: 6.3,
+				z: 0
+			});
+		for (let n = 0; n < nodes.length; n++) {
+			let nodeName = nodes[n].name;
+			let nodeId = nodes[n].nodeid;
+			let nodeValue = nodes[n].weight;
+			let nodeX = nodes[n].x;
+			let nodeY = nodes[n].y;
+			let nodeH = nodes[n].h;
+			let nodeW = nodes[n].w;
+			let nodeElement = document.createElement('a-entity');
+			nodeElement.setAttribute('id', 'nodeId');
+			nodeElement.setAttribute('class', "nodeElement");
+			nodeElement.setAttribute('position', {
+				x: (nodeX/data.scaleFactor),
+				y: (nodeY/data.scaleFactor),
+				z: 0
+			});
+			console.log(nodeX/data.scaleFactor);
+			console.log(nodeY/data.scaleFactor);
+			nodeElement.setAttribute('text', {
+				color: 'black',
+				value: nodeName,
+				width: (nodeH/10),
+				align: 'center'
+			});
+			nodeElement.setAttribute('geometry', {
+				primitive: 'plane',
+				height: (nodeH/100),
+				width: (nodeW/100),
+			});
+			nodeElement.setAttribute('material', {
+				color: 'white',
+				shader: 'flat'
+			});
+			nodeElementContainer.appendChild(nodeElement);
+			console.log("box created")
+		}
+		var edgeElementContainer = document.createElement('a-entity');
+		edgeElementContainer.setAttribute('position', {
+				x: 0-(json.graph.centralpoint.x/data.scaleFactor),
+				y: 6.3,
+				z: 0
+			});
+		for (let n = 0; n < edges.length; n++) {
+			let edgeValue = edges[n].weight;
+			let edgeStartX = edges[n].controlpoints[0].x;
+			let edgeStartY = edges[n].controlpoints[0].y;
+			var lineLength = edges[n].controlpoints.length;
+			let edgeEndX = edges[n].controlpoints[lineLength-1].x;
+			let edgeEndY = edges[n].controlpoints[lineLength-1].y;
+			
+			let edgeElement = document.createElement('a-entity');
+			edgeElement.setAttribute('class', "edgeElement");
+			edgeElement.setAttribute('line', {
+				start: {x: (edgeStartX/data.scaleFactor), y: (edgeStartY/data.scaleFactor), z:0},
+				end: {x: (edgeEndX/data.scaleFactor), y: (edgeEndY/data.scaleFactor), z:0},
+				color: 'black'
+			});
+			edgeElementContainer.appendChild(edgeElement);
+			console.log("line created")
+		}
+		el.appendChild(nodeElementContainer);
+		el.appendChild(edgeElementContainer);
+	}
+});

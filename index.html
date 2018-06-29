@@ -1,13 +1,18 @@
 <head>
   <title>My A-Frame Scene</title>
-  <script src="https://aframe.io/releases/0.7.1/aframe.min.js"></script>
-  <script src="https://unpkg.com/aframe-forcegraph-component/dist/aframe-forcegraph-component.min.js"></script>
-  <script type="text/javascript" src="demo.json"></script>
-  <script type="text/javascript" src="app.js"></script>
-</head>
+  <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+  <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
+  <script src="pg_component.js"></script>
+  </head>
 
 <body>
   <a-scene>
-    <a-entity id="graph" forcegraph="json-url: demo.json; edges="links"></a-entity>
+    <a-entity environment></a-entity>
+    <a-entity id="camera" position="0 1.6 5">
+	<a-camera></a-camera>
+	</a-entity>
+	<a-entity scale="0.5 0.5 0.5">
+    <a-entity pgvr="scaleFactor: 100"></a-entity>
+	</a-entity>
   </a-scene>
 </body>
