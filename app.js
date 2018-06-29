@@ -1,6 +1,6 @@
 let scene = document.querySelector('a-scene');
-let sky = document.querySelector('a-sky');
-let objectContainer = document.querySelector('#object-container');
+let graph = document.querySelector('#graph');
+var jcontent = JSON.parse(data);
 
 // random num generator
 function getRandomNumber(x, y) {
@@ -17,14 +17,10 @@ function getRandomColor() {
   return randomColor;
 }
 
-// set sky values
-sky.setAttribute('color', `#${getRandomColor()}`);
-sky.setAttribute('animation__color', `property: color; dir: alternate; dur: 2000; easing: easeInOutSine; loop: true; to: #${getRandomColor()}`);
-
 // change this value for more or less rings
-let totalRingElements = 10;
+let totalRingElements = 3;
 
-function generateAllElements() {
+function generateAllElementsOld() {
 
   for(let a = 0; a < totalRingElements; a++){
 
