@@ -4389,8 +4389,8 @@ AFRAME.registerComponent('pgvr', {
 			let edgeElement = document.createElement('a-entity');
 			edgeElement.setAttribute('class', "edgeElement");
 			edgeElement.setAttribute('line', {
-				start: {x: (edgeStartX/data.scaleFactor), y: (edgeStartY/data.scaleFactor), z:0},
-				end: {x: (edgeEndX/data.scaleFactor), y: (edgeEndY/data.scaleFactor), z:0},
+				start: {x: (edgeStartX/data.scaleFactor), y: (edgeStartY/data.scaleFactor), z:-0.1},
+				end: {x: (edgeEndX/data.scaleFactor), y: (edgeEndY/data.scaleFactor), z:-0.1},
 				color: 'black'
 			});
 			edgeElementContainer.appendChild(edgeElement);
