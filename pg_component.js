@@ -4378,13 +4378,13 @@ AFRAME.registerComponent('pgvr', {
 				y: 6.3,
 				z: 0
 			});
-		for (let n = 0; n < edges.length; n++) {
-			let edgeValue = edges[n].weight;
-			let edgeStartX = edges[n].controlpoints[0].x;
-			let edgeStartY = edges[n].controlpoints[0].y;
-			var lineLength = edges[n].controlpoints.length;
-			let edgeEndX = edges[n].controlpoints[lineLength-1].x;
-			let edgeEndY = edges[n].controlpoints[lineLength-1].y;
+		for (let i = 0; i < edges.length; i++) {
+			let edgeValue = edges[i].weight;
+			let edgeStartX = edges[i].controlpoints[0].x;
+			let edgeStartY = edges[i].controlpoints[0].y;
+			var lineLength = edges[i].controlpoints.length;
+			let edgeEndX = edges[i].controlpoints[lineLength-1].x;
+			let edgeEndY = edges[i].controlpoints[lineLength-1].y;
 			
 			let edgeElement = document.createElement('a-entity');
 			edgeElement.setAttribute('class', "edgeElement");
