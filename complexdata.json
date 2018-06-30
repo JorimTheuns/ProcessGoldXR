@@ -1,0 +1,445 @@
+{
+	"nodes": [{
+			"name": "Approve invoice",
+			"id": 0,
+			"desc": "Frequency: 1102",
+			"val": 1.529,
+			"value": 1255,
+			"start": false
+		}, {
+			"name": "Check contract conditions",
+			"id": 1,
+			"desc": "Frequency: 384",
+			"val": 0.533,
+			"value": 657,
+			"start": false
+		}, {
+			"name": "Check received invoice",
+			"id": 2,
+			"desc": "Frequency: 1366",
+			"val": 1.896,
+			"value": 1366,
+			"start": false
+		}, {
+			"name": "Checked and approved",
+			"id": 3,
+			"desc": "Frequency: 111",
+			"val": 0.154,
+			"value": 112,
+			"start": false
+		}, {
+			"name": "Clarify deviant invoice",
+			"id": 4,
+			"desc": "Frequency: 8",
+			"val": 0.011,
+			"value": 9,
+			"start": false
+		}, {
+			"name": "Final check of invoice",
+			"id": 6,
+			"desc": "Frequency: 1255",
+			"val": 1.742,
+			"value": 1842,
+			"start": false
+		}, {
+			"name": "Pay employee reimbursement",
+			"id": 7,
+			"desc": "Frequency: 75",
+			"val": 0.104,
+			"value": 80,
+			"start": false
+		}, {
+			"name": "Pay invoice",
+			"id": 8,
+			"desc": "Frequency: 1366",
+			"val": 1.896,
+			"value": 1458,
+			"start": false
+		}, {
+			"name": "Post-process invoice",
+			"id": 9,
+			"desc": "Frequency: 5",
+			"val": 0.007,
+			"value": 5,
+			"start": false
+		}, {
+			"name": "Process employee reimbursement",
+			"id": 10,
+			"desc": "Frequency: 5",
+			"val": 0.007,
+			"value": 5,
+			"start": false
+		}, {
+			"name": "Receive invoice",
+			"id": 12,
+			"desc": "Frequency: 1441",
+			"val": 2,
+			"value": 1441,
+			"start": true
+		}, {
+			"name": "Repeat payment process",
+			"id": 13,
+			"desc": "Frequency: 6",
+			"val": 0.008,
+			"value": 6,
+			"start": false
+		}, {
+			"name": "Request data",
+			"id": 14,
+			"desc": "Frequency: 384",
+			"val": 0.533,
+			"value": 384,
+			"start": false
+		}, {
+			"name": "Approve invoice loop",
+			"id": 1013,
+			"val": 0.01
+		}, {
+			"name": "Check contract conditions loop",
+			"id": 1014,
+			"val": 0.01
+		}, {
+			"name": "Final check of invoice loop",
+			"id": 1015,
+			"val": 0.01
+		}, {
+			"name": "Pay invoice loop",
+			"id": 1016,
+			"val": 0.01
+		}
+	],
+	"links": [{
+			"name": "Approve invoice loop",
+			"source": 0,
+			"target": 1013,
+			"weight": 143,
+			"speed": 0.019,
+			"width": 1.79,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "Approve invoice loop",
+			"source": 1013,
+			"target": 0,
+			"weight": 143,
+			"speed": 0.019,
+			"width": 1.79,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "From Final check of invoice",
+			"desc": "to Approve invoice",
+			"source": 0,
+			"target": 6,
+			"weight": 4,
+			"speed": 0.0039,
+			"width": 1.42,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Pay invoice",
+			"desc": "to Approve invoice",
+			"source": 0,
+			"target": 8,
+			"weight": 1108,
+			"speed": 0.0192,
+			"width": 1.8,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "Check contract conditions loop",
+			"source": 1,
+			"target": 1014,
+			"weight": 212,
+			"speed": 0.0163,
+			"width": 1.79,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "Check contract conditions loop",
+			"source": 1014,
+			"target": 1,
+			"weight": 212,
+			"speed": 0.0163,
+			"width": 1.79,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "From Final check of invoice",
+			"desc": "to Check contract conditions",
+			"source": 1,
+			"target": 6,
+			"weight": 444,
+			"speed": 0.0218,
+			"width": 1.8,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Request data",
+			"desc": "to Check contract conditions",
+			"source": 1,
+			"target": 14,
+			"weight": 1,
+			"speed": 0.0036,
+			"width": 0.3,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Check contract conditions",
+			"desc": "to Check received invoice",
+			"source": 2,
+			"target": 1,
+			"weight": 1,
+			"speed": 0.0036,
+			"width": 0.3,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Checked and approved",
+			"desc": "to Check received invoice",
+			"source": 2,
+			"target": 3,
+			"weight": 111,
+			"speed": 0.0178,
+			"width": 1.79,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Final check of invoice",
+			"desc": "to Check received invoice",
+			"source": 2,
+			"target": 6,
+			"weight": 871,
+			"speed": 0.0157,
+			"width": 1.8,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Request data",
+			"desc": "to Check received invoice",
+			"source": 2,
+			"target": 14,
+			"weight": 383,
+			"speed": 0.0209,
+			"width": 1.8,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Pay invoice",
+			"desc": "to Checked and approved",
+			"source": 3,
+			"target": 8,
+			"weight": 112,
+			"speed": 0.0177,
+			"width": 1.79,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Pay invoice",
+			"desc": "to Clarify deviant invoice",
+			"source": 4,
+			"target": 8,
+			"weight": 9,
+			"speed": 0.0045,
+			"width": 1.63,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Approve invoice",
+			"desc": "to Final check of invoice",
+			"source": 6,
+			"target": 0,
+			"weight": 1112,
+			"speed": 0.0191,
+			"width": 1.8,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Check contract conditions",
+			"desc": "to Final check of invoice",
+			"source": 6,
+			"target": 1,
+			"weight": 61,
+			"speed": 0.0274,
+			"width": 1.78,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "Final check of invoice loop",
+			"source": 6,
+			"target": 1015,
+			"weight": 442,
+			"speed": 0.0348,
+			"width": 1.8,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "Final check of invoice loop",
+			"source": 1015,
+			"target": 6,
+			"weight": 442,
+			"speed": 0.0348,
+			"width": 1.8,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "From Pay invoice",
+			"desc": "to Final check of invoice",
+			"source": 6,
+			"target": 8,
+			"weight": 221,
+			"speed": 0.0105,
+			"width": 1.79,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Repeat payment process",
+			"desc": "to Final check of invoice",
+			"source": 6,
+			"target": 13,
+			"weight": 6,
+			"speed": 0.0059,
+			"width": 1.55,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Process employee reimbursement",
+			"desc": "to Pay employee reimbursement",
+			"source": 7,
+			"target": 10,
+			"weight": 5,
+			"speed": 0.0018,
+			"width": 1.5,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Checked and approved",
+			"desc": "to Pay invoice",
+			"source": 8,
+			"target": 3,
+			"weight": 1,
+			"speed": 0.0079,
+			"width": 0.3,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Clarify deviant invoice",
+			"desc": "to Pay invoice",
+			"source": 8,
+			"target": 4,
+			"weight": 9,
+			"speed": 0.0045,
+			"width": 1.63,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Final check of invoice",
+			"desc": "to Pay invoice",
+			"source": 8,
+			"target": 6,
+			"weight": 80,
+			"speed": 0.0234,
+			"width": 1.78,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "Pay invoice loop",
+			"source": 8,
+			"target": 1016,
+			"weight": 2,
+			"speed": 0.0012,
+			"width": 1.05,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "Pay invoice loop",
+			"source": 1016,
+			"target": 8,
+			"weight": 2,
+			"speed": 0.0012,
+			"width": 1.05,
+			"particles": 3,
+			"loop": 0.5
+		}, {
+			"name": "From Pay employee reimbursement",
+			"desc": "to Post-process invoice",
+			"source": 9,
+			"target": 7,
+			"weight": 5,
+			"speed": 0.0006,
+			"width": 1.5,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Pay employee reimbursement",
+			"desc": "to Process employee reimbursement",
+			"source": 10,
+			"target": 7,
+			"weight": 5,
+			"speed": 0.0018,
+			"width": 1.5,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Check received invoice",
+			"desc": "to Receive invoice",
+			"source": 12,
+			"target": 2,
+			"weight": 1366,
+			"speed": 0.0173,
+			"width": 1.8,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Pay employee reimbursement",
+			"desc": "to Receive invoice",
+			"source": 12,
+			"target": 7,
+			"weight": 70,
+			"speed": 0.0016,
+			"width": 1.78,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Post-process invoice",
+			"desc": "to Receive invoice",
+			"source": 12,
+			"target": 9,
+			"weight": 5,
+			"speed": 0.0006,
+			"width": 1.5,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Pay invoice",
+			"desc": "to Repeat payment process",
+			"source": 13,
+			"target": 8,
+			"weight": 6,
+			"speed": 0.0059,
+			"width": 1.55,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Check contract conditions",
+			"desc": "to Request data",
+			"source": 14,
+			"target": 1,
+			"weight": 383,
+			"speed": 0.0209,
+			"width": 1.8,
+			"particles": 6,
+			"loop": 0.2
+		}, {
+			"name": "From Final check of invoice",
+			"desc": "to Request data",
+			"source": 14,
+			"target": 6,
+			"weight": 1,
+			"speed": 0.0036,
+			"width": 0.3,
+			"particles": 6,
+			"loop": 0.2
+		}
+	]
+}

@@ -3,18 +3,40 @@
   <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
   <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
    <script src="https://unpkg.com/aframe-forcegraph-component/dist/aframe-forcegraph-component.min.js"></script>
+  <script src="aframe-effects.min.js"></script>
   <script src="pg_component.js"></script>
   </head>
 
 <body>
-   <a-scene stats>
-      <a-camera wasd-controls="fly: true; acceleration: 600">
+     <a-scene 
+    effects=" ">
+	<a-assets>
+	<img id="logo" src="processGoldLogo.png">
+	</a-assets>
+   <a-entity position="2 0 0" rotation="0 90 0">
+      <a-camera>
         <a-cursor color="black" opacity="0.5"></a-cursor>
       </a-camera>
-      <a-sky color="#555"></a-sky>
-	  <a-entity scale="0.1 0.1 0.1">
+	  </a-entity>
+	  <a-entity environment="preset: default; flatShading: true; groundTexture: none; grid: 1x1; gridColor:#008bce"></a-entity>
+	  <a-plane position="0 0.01 0" src="#logo" material="flatShading:true;transparent:true" geometry="" scale="1 1.2 1" rotation="-90 90 0"></a-plane>
+	  <a-entity position="0 1.6 0" scale="0.01 0.01 0.01">
 
-      <a-entity forcegraph="json-url: miserables.json; node-label: id; node-auto-color-by: group; link-directional-arrow-length: 1.5; link-directional-arrow-rel-pos: 1;"></a-entity>
+      <a-entity forcegraph="json-url: complexdata.json;
+	  node-auto-color-by: start;
+	  num-dimensions: 3;
+	  node-resolution: 10;
+	  node-rel-size: 10;
+	  node-opacity: 1;
+	  link-opacity: 0.2;
+	  link-directional-particle-speed: speed;
+	  link-directional-particle-width: width;
+	  link-curvature: loop;
+	  link-directional-particles: particles;
+	  node-label: name;
+	  link-directional-particle-resolution: 4;
+	  link-directional-arrow-length: 0;
+	  link-directional-arrow-rel-pos: 1;"></a-entity>
    </a-entity>
    </a-scene>
 </body>
