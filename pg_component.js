@@ -4374,46 +4374,40 @@ AFRAME.registerComponent('pgvr', {
 			nodeElementContainer.appendChild(nodeElement);
 			console.log("box created")
 		}
+		
+		
+		var edgeRenderElementContainer = document.createElement('a-entity');
 		var edgeElementContainer = document.createElement('a-entity');
-		edgeElementContainer.setAttribute('position', {
-			x: 0 - (json.graph.centralpoint.x / data.scaleFactor),
-			y: 6.3,
-			z: 0
-		});
 		for (let i = 0; i < edges.length; i++) {
-			var edgeElement = document.createElement('a-entity');
+			var curve = document.createElement('a-curve');
+			curve.setAttribute('id', 'edgeElement_' + i);
+			curve.setAttribute('type', 'QuadraticBezier');
 			let edgeValue = edges[i].weight;
 			var lineLength = edges[i].controlpoints.length;
-			for (let j = 0; j < lineLength-1; j++) {
-				
-				let edgeStartX = edges[i].controlpoints[j].x;
-				let edgeStartY = edges[i].controlpoints[j].y;
-				let edgeEndX = edges[i].controlpoints[j+1].x;
-				let edgeEndY = edges[i].controlpoints[j+1].y;
+			for (let j = 0; j < lineLength; j++) {
+				let curvePoint = document.createElement('a-curve-point');
+				let pointX = edges[i].controlpoints[j].x;
+				let pointY = edges[i].controlpoints[j].y;
 
-				let edgeSectionElement = document.createElement('a-entity');
-				edgeSectionElement.setAttribute('class', "edgeSectionElement");
-				edgeSectionElement.setAttribute('line', {
-					start: {
-						x: (edgeStartX / data.scaleFactor),
-						y: (edgeStartY / data.scaleFactor),
-						z: -0.1
-					},
-					end: {
-						x: (edgeEndX / data.scaleFactor),
-						y: (edgeEndY / data.scaleFactor),
-						z: -0.1
-					},
-					color: 'black',
-					weight: edgeValue
+				curvePoint.setAttribute('position', {
+					x: (pointX / data.scaleFactor) - (json.graph.centralpoint.x / data.scaleFactor),
+					y: (pointY / data.scaleFactor)+6.3,
+					z: -0.1
 				});
-				edgeElement.appendChild(edgeSectionElement);
-				console.log("line section created");
+				
+				curve.appendChild(curvePoint);
+				console.log("curve point created");
 			}
-			edgeElementContainer.appendChild(edgeElement);
-			console.log("line created");
+			edgeElementContainer.appendChild(curve);
+			console.log("curve created");
+			var edgeRender = document.createElement('a-draw-curve');
+			edgeRender.setAttribute('curveref', '#edgeElement_' + i);
+			edgeRender.setAttribute('material', 'shader', 'line');
+			edgeRender.setAttribute('material', 'color', 'black');
+			edgeRenderElementContainer.appendChild(edgeRender);
 		}
 		el.appendChild(nodeElementContainer);
 		el.appendChild(edgeElementContainer);
+		el.appendChild(edgeRenderElementContainer);
 	}
 });
