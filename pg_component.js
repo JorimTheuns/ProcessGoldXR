@@ -4308,9 +4308,7 @@ json = {
 
 AFRAME.registerComponent('pgvr', {
 	schema: {
-		scaleFactor: {
-			type: 'number'
-		}
+		scaleFactor: {type: 'number'}
 	},
 
 	init: function () {
@@ -4323,21 +4321,21 @@ AFRAME.registerComponent('pgvr', {
 		var sceneEl = document.querySelector('a-scene');
 		var nodes = json.graph.nodes;
 		var edges = json.graph.edges;
-
+		
 		var cameraEl = document.querySelector('a-camera');
-
+		
 		cameraEl.setAttribute('position', {
-			x: 0,
-			y: 0,
-			z: 0
-		});
+				x: 0,
+				y: 0,
+				z: 0
+			});
 
 		var nodeElementContainer = document.createElement('a-entity');
 		nodeElementContainer.setAttribute('position', {
-			x: 0 - (json.graph.centralpoint.x / data.scaleFactor),
-			y: 6.3,
-			z: 0
-		});
+				x: 0-(json.graph.centralpoint.x/data.scaleFactor),
+				y: 6.3,
+				z: 0
+			});
 		for (let n = 0; n < nodes.length; n++) {
 			let nodeName = nodes[n].name;
 			let nodeId = nodes[n].nodeid;
@@ -4350,22 +4348,22 @@ AFRAME.registerComponent('pgvr', {
 			nodeElement.setAttribute('id', 'nodeId');
 			nodeElement.setAttribute('class', "nodeElement");
 			nodeElement.setAttribute('position', {
-				x: (nodeX / data.scaleFactor),
-				y: (nodeY / data.scaleFactor),
+				x: (nodeX/data.scaleFactor),
+				y: (nodeY/data.scaleFactor),
 				z: 0
 			});
-			console.log(nodeX / data.scaleFactor);
-			console.log(nodeY / data.scaleFactor);
+			console.log(nodeX/data.scaleFactor);
+			console.log(nodeY/data.scaleFactor);
 			nodeElement.setAttribute('text', {
 				color: 'black',
 				value: nodeName,
-				width: (nodeH / 10),
+				width: (nodeH/10),
 				align: 'center'
 			});
 			nodeElement.setAttribute('geometry', {
 				primitive: 'plane',
-				height: (nodeH / 100),
-				width: (nodeW / 100),
+				height: (nodeH/100),
+				width: (nodeW/100),
 			});
 			nodeElement.setAttribute('material', {
 				color: 'white',
@@ -4374,40 +4372,31 @@ AFRAME.registerComponent('pgvr', {
 			nodeElementContainer.appendChild(nodeElement);
 			console.log("box created")
 		}
-		
-		
-		var edgeRenderElementContainer = document.createElement('a-entity');
 		var edgeElementContainer = document.createElement('a-entity');
+		edgeElementContainer.setAttribute('position', {
+				x: 0-(json.graph.centralpoint.x/data.scaleFactor),
+				y: 6.3,
+				z: 0
+			});
 		for (let i = 0; i < edges.length; i++) {
-			var curve = document.createElement('a-curve');
-			curve.setAttribute('id', 'edgeElement_' + i);
-			curve.setAttribute('type', 'QuadraticBezier');
 			let edgeValue = edges[i].weight;
+			let edgeStartX = edges[i].controlpoints[0].x;
+			let edgeStartY = edges[i].controlpoints[0].y;
 			var lineLength = edges[i].controlpoints.length;
-			for (let j = 0; j < lineLength; j++) {
-				let curvePoint = document.createElement('a-curve-point');
-				let pointX = edges[i].controlpoints[j].x;
-				let pointY = edges[i].controlpoints[j].y;
-
-				curvePoint.setAttribute('position', {
-					x: (pointX / data.scaleFactor) - (json.graph.centralpoint.x / data.scaleFactor),
-					y: (pointY / data.scaleFactor)+6.3,
-					z: -0.1
-				});
-				
-				curve.appendChild(curvePoint);
-				console.log("curve point created");
-			}
-			edgeElementContainer.appendChild(curve);
-			console.log("curve created");
-			var edgeRender = document.createElement('a-draw-curve');
-			edgeRender.setAttribute('curveref', '#edgeElement_' + i);
-			edgeRender.setAttribute('material', 'shader', 'line');
-			edgeRender.setAttribute('material', 'color', 'black');
-			edgeRenderElementContainer.appendChild(edgeRender);
+			let edgeEndX = edges[i].controlpoints[lineLength-1].x;
+			let edgeEndY = edges[i].controlpoints[lineLength-1].y;
+			
+			let edgeElement = document.createElement('a-entity');
+			edgeElement.setAttribute('class', "edgeElement");
+			edgeElement.setAttribute('line', {
+				start: {x: (edgeStartX/data.scaleFactor), y: (edgeStartY/data.scaleFactor), z:-0.1},
+				end: {x: (edgeEndX/data.scaleFactor), y: (edgeEndY/data.scaleFactor), z:-0.1},
+				color: 'black'
+			});
+			edgeElementContainer.appendChild(edgeElement);
+			console.log("line created")
 		}
 		el.appendChild(nodeElementContainer);
 		el.appendChild(edgeElementContainer);
-		el.appendChild(edgeRenderElementContainer);
 	}
 });
