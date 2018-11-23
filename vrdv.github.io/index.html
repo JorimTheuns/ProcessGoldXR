@@ -1,0 +1,63 @@
+<head>
+  <title>My A-Frame Scene</title>
+  <meta http-equiv="Cache-control" content="no-cache">
+	<script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+	<script src="https://d3js.org/d3.v4.min.js"></script>
+	<script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
+	<!--<script src="aframe-curved-UI.js"></script>-->
+	<script src="a-jline.js"></script>
+    <script src="node-animation.js"></script>
+	<script src="aframe-meshline-component.js"></script>
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+    <script src="event-public.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@3.0.x/dist/aframe-event-set-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-layout-component@4.1.0/dist/aframe-layout-component.min.js"></script>
+  </head>
+
+<body>
+    	<script src="d3_main.js"></script>
+<a-scene antialias="true" debug='true'>
+
+  <!--<a-entity id="mouseCursor" cursor="rayOrigin: mouse"></a-entity>-->
+  <!-- Camera -->
+  <a-entity position="0 1.6 0" rotation='0 0 0'>
+    <a-entity camera look-controls wasd-controls="fly: true">
+      <a-cursor></a-cursor>
+    </a-entity>
+  </a-entity>
+  
+  <a-entity position='-1 2 0' mymeshline="linewidth: 1; path: 0 0 0, -1 1 1; color: #E20049"></a-entity>
+    
+  <a-cylinder rotation="0 0 0" width="4" height="0.01" color="#363636"></a-cylinder>
+
+    <!--
+  <a-mixin id="option"
+                 geometry="primitive: box; width: 0.4; depth: 0.01; height: 0.1"
+                 material="color: #0049E2"
+                 event-proxy="listen: click; target: node"
+                 event-set__enter="_event: mouseenter; material.color: #EEE"
+                 event-set__leave="_event: mouseleave; material.color: #0049E2"
+                 text="align: center; width: 1.5; color: #FFF; zOffset: 0.1"></a-mixin>
+        <a-entity layout="type: line; margin: 2.5" position="0 0.5 -.5" rotation="-90 0 0">
+          <a-entity mixin="option" event-proxy="emit: curvenode" text="value: Curve Nodes"></a-entity>
+          <a-entity mixin="option" event-proxy="emit: flatnode" text="value: Flatten Nodes"></a-entity>
+        </a-entity>
+-->
+    
+  <a-plane id="curveButton" position="0 0.5 -1"
+           
+           rotation="-45 0 0" width="0.4" height="0.1" text="color: black; align: center; value: Curve Me; width: 1.5"
+           
+           material="shader: flat; color: #ffffff"
+           
+           event-public="listen: click; target: .cancurve; onemit: curve; offemit: flat"
+           
+           nodemousebehaviour="entercolor: #E0E7F2; enterscale: 1.2 1.2 1.2; downcolor: #358ad7; downscale: 1.1 1.1 1.1; upcolor: #ffffff; upscale: 1.2 1.2 1.2; leavecolor: #ffffff; leavescale: 1 1 1; downpos: 0 0.5 -1; uppos: 0 0.5 -1"
+           
+           ></a-plane>
+  <a-sky color="#fefefe"></a-sky>
+    
+</a-scene>
+
+
+</body>
