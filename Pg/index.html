@@ -1,0 +1,68 @@
+<head>
+    <title>My A-Frame Scene</title>
+
+    <meta http-equiv="Cache-control" content="no-cache">
+
+    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+
+    <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
+    <script src="https://unpkg.com/aframe-event-set-component@^4.0.0/dist/aframe-event-set-component.min.js"></script>
+
+    <script src="aframe-meshline-component.js"></script>
+    <script src="a-jline.js"></script>
+    <script src="utility-components.js"></script>
+
+    <script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v4.1.2/dist/aframe-extras.min.js"></script>
+    <script src="https://unpkg.com/super-hands@3.0.0/dist/super-hands.min.js"></script>
+    
+    <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
+    
+    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+
+</head>
+
+<body>
+   <a-scene environment="preset: goldmine; dressingColor: #db8a00; grid: dots; gridColor: #db8a00">
+    <!--<a-scene debug="true">-->
+        <a-assets>
+            <a-mixin id="pointer" raycaster="showLine: true; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
+                               colliderEventProperty: els;
+                               colliderEndEvent:raycaster-intersection-cleared;
+                               colliderEndEventProperty: clearedEls;">
+            </a-mixin>
+            <a-mixin id="controller-right" mixin="pointer" vive-controls="hand: right" oculus-touch-controls="hand: right" windows-motion-controls="hand: right" gearvr-controls daydream-controls oculus-go-controls>
+            </a-mixin>
+            <a-mixin id="controller-left" mixin="pointer" vive-controls="hand: left" oculus-touch-controls="hand: left" windows-motion-controls="hand: left">
+            </a-mixin>
+            
+            <a-mixin id="graph-parent" look-at-fixed-height=[camera]></a-mixin>
+            
+            <a-mixin id="node-parent" look-at=[camera]></a-mixin>
+
+            <a-mixin id="node-element" geometry="primitive: plane; width: 0.5; height: 0.15" hoverable selectable clickable material="color:#ddd" dynamic-positionality
+                     text="value: default; color: white; align: center"
+                     event-set__hoveron="_event: hover-start; material.opacity: 0.7; transparent: true" 
+                     event-set__hoveroff="_event: hover-end; material.opacity: 1; transparent: false" 
+                     event-set__grabon="_event: grab-start; selectable.state: true"
+                 event-set__graboff="_event: grab-end; selectable.state: true"
+                     animation__selectpos="startEvents: grab-start; property: position; dir: alternate; dur: 100; loop: false; easing: easeInOutQuad; from: 0 0 0; to: 0 0 0.4"
+                     animation__deselectpos="startEvents: grab-end; property: position; dir: alternate; dur: 100; loop: false; easing: easeInOutQuad; from: 0 0 0.4; to: 0 0 0"
+                    animation__selectheight="startEvents: grab-start; property: geometry.height; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: 0.09; to: 0.27"
+                     animation__deselectheight="startEvents: grab-end; property: geometry.height; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: 0.27; to: 0.09">
+            </a-mixin>
+
+        </a-assets>
+        
+        <a-entity>
+            <a-camera wasd-controls="fly: true">
+                <a-cursor id="cursor" mixin="pointer"></a-cursor>
+            </a-camera>
+            <a-entity id="rhand" mixin="controller-right"></a-entity>
+            <a-entity id="lhand" mixin="controller-left"></a-entity>
+        </a-entity>
+
+    </a-scene>
+        <script src="init_d3.js"></script>
+</body>
