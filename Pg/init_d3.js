@@ -188,7 +188,7 @@ function visualise() {
         .on("grab-end", function (d) {
             d3.select(this).attr("text", d => ("value: " + d.name + ";"))
         });
-    
+
     edges = graph.selectAll("#edges")
         .data(edgeData)
         .enter()
@@ -208,9 +208,7 @@ function visualise() {
             //console.log("linewidth should be: " + f(lwScale(d.weight)));
             return lwScale(d.weight)
         })
-        .attr('linewidthstyler', function (d) {
-            return "1"
-        })
+        .attr('linewidthstyler', 1)
         //.attr('linewidth', '100')
         .attr('path', function (d, index) {
 
@@ -247,7 +245,9 @@ function visualise() {
             } else {
                 return flatPaths[index]
             }
-        });
+        })
+        //.attr('traces', d => ('fromNode: #n' + d.fromnode + '; toNode: #n' + d.tonode))
+    ;
 }
 
 function getCurvyCoords(x, y, radius, eyeHeight) {

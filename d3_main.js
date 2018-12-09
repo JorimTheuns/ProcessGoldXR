@@ -205,7 +205,7 @@ function visualise() {
             let curvyCoords = getCurvyCoords(pScale(d.x), tScale(d.y), radius, eyeHeight)
             curve_string = curvyCoords[0] + ' ' + curvyCoords[1] + ' ' + curvyCoords[2]
             flat_string = xScale(d.x) + ' ' + yScale(d.y) + ' ' + -radius;
-            animString = "property: position; dir: alternate; dur: 1; loop: false; easing: easeInOutQuad; from: " + flat_string + "; to: " + curve_string + "; startEvents: curve"
+            animString = "property: position; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: " + flat_string + "; to: " + curve_string + "; startEvents: curve"
             return animString
         })
         .attr('animation__flatposition', function (d) {
@@ -213,21 +213,21 @@ function visualise() {
             let curvyCoords = getCurvyCoords(pScale(d.x), tScale(d.y), radius, eyeHeight)
             curve_string = curvyCoords[0] + ' ' + curvyCoords[1] + ' ' + curvyCoords[2]
             flat_string = xScale(d.x) + ' ' + yScale(d.y) + ' ' + -radius;
-            animString = "property: position; dir: alternate; dur: 1; loop: false; easing: easeInOutQuad; from: " + curve_string + "; to: " + flat_string + "; startEvents: flat"
+            animString = "property: position; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: " + curve_string + "; to: " + flat_string + "; startEvents: flat"
             return animString
         })
         .attr('animation__curverotation', function (d) {
             var animString;
             var curve_string = tScale(d.y) + ' ' + pScale(d.x) + ' 0';
             var flat_string = '0 0 0';
-            animString = "property: rotation; dir: alternate; dur: 1; loop: false; easing: easeInOutQuad; from: " + flat_string + "; to: " + curve_string + "; startEvents: curve"
+            animString = "property: rotation; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: " + flat_string + "; to: " + curve_string + "; startEvents: curve"
             return animString
         })
         .attr('animation__flatrotation', function (d) {
             var animString;
             var curve_string = tScale(d.y) + ' ' + pScale(d.x) + ' 0';
             var flat_string = '0 0 0';
-            animString = "property: rotation; dir: alternate; dur: 1; loop: false; easing: easeInOutQuad; from: " + curve_string + "; to: " + flat_string + "; startEvents: flat"
+            animString = "property: rotation; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: " + curve_string + "; to: " + flat_string + "; startEvents: flat"
             return animString
         })
         .attr('nodemousebehaviour', function (d) {

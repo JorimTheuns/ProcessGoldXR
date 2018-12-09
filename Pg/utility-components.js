@@ -164,7 +164,6 @@ AFRAME.registerComponent('dynamic-positionality', {
                 trackingVector = worldVector;
                 var distance = parentPosition.distanceTo(trackingVector);
                 var desiredZ = THREE.Math.clamp((1-distance), 0, 1);
-                console.log(-desiredZ);
                 object3D.position.z = -desiredZ;
             }
         }; 
@@ -198,4 +197,11 @@ AFRAME.registerComponent('selectable', {
         }
     }
 
+});
+
+AFRAME.registerComponent('plane-helper', {
+  init: function () {
+    var plane = new THREE.Plane( new THREE.Vector3(0, 0, 1).normalize(), 0.1);
+    this.el.setObject3D('helper', new THREE.PlaneHelper( plane, 1, 0xffff00 ));
+  }
 });
