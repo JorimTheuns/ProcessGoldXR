@@ -165,7 +165,7 @@ AFRAME.registerComponent('dynamic-positionality', {
                 object3D.parent.worldToLocal(target3D.getWorldPosition(worldVector));
                 trackingVector = worldVector;
                 var distance = parentPosition.distanceTo(trackingVector);
-                var desiredZ = THREE.Math.clamp((1 - distance), 0, 1);
+                var desiredZ = THREE.Math.clamp((1.6 - distance), 0, 1.6);
                 object3D.position.z = -desiredZ;
             }
         };
