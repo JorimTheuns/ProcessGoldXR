@@ -28,7 +28,7 @@
     <a-scene environment="preset: goldmine; dressingColor: #db8a00; grid: dots; gridColor: #db8a00">
         <!--<a-scene debug="true">-->
         <a-assets>
-            <a-mixin id="pointer" raycaster="showLine: false; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
+            <a-mixin id="pointer" raycaster="showLine: true; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
                                colliderEventProperty: els;
                                colliderEndEvent:raycaster-intersection-cleared;
                                colliderEndEventProperty: clearedEls;">
