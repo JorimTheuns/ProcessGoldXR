@@ -232,7 +232,7 @@ function visualise() {
             for (let i = 0; i < tP.length; i++) {
                 curvyCoords[i] = getCurvyCoords(pScale(tP[i].x), tScale(tP[i].y), radius - zshift, eyeHeight);
             }
-            for (let i = 0; i < tP.length - 1; i++) {
+            for (let i = 0; i < tP.length - 4; i++) {
                 curvy_pathString += curvyCoords[i][0] + ' ' + curvyCoords[i][1] + ' ' + curvyCoords[i][2] + ', ';
                 flat_pathString += xScale(tP[i].x) + ' ' + yScale(tP[i].y) + ' ' + -(zshift) + ', ';
             }
