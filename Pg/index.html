@@ -20,7 +20,7 @@
 
     <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
 
-    <script src="https://unpkg.com/aframe-animation-component@^4.1.2/dist/aframe-animation-component.min.js"></script>
+    <script src="aframe-animation-component.js"></script>
 
 </head>
 
@@ -28,7 +28,7 @@
     <a-scene environment="preset: goldmine; dressingColor: #db8a00; grid: dots; gridColor: #db8a00">
         <!--<a-scene debug="true">-->
         <a-assets>
-            <a-mixin id="pointer" raycaster="showLine: true; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
+            <a-mixin id="pointer" raycaster="showLine: false; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
                                colliderEventProperty: els;
                                colliderEndEvent:raycaster-intersection-cleared;
                                colliderEndEventProperty: clearedEls;">
