@@ -127,16 +127,18 @@ delete AFRAME.components['dynamic-positionality'];
  */
 AFRAME.registerComponent('dynamic-positionality', {
     schema: {
-        radius: {type: "float"}
+        radius: {
+            type: "float"
+        }
     },
-    init: function (){
+    init: function () {
         this.target3D = null;
         this.trackingVector = new THREE.Vector3();
         this.worldVector = new THREE.Vector3();
     },
-    update: function (){
+    update: function () {
         var self = this;
-        var targetEl = self.el.sceneEl.querySelector('[camera]');   
+        var targetEl = self.el.sceneEl.querySelector('[camera]');
         if (!targetEl) {
             warn('"' + target + '" does not point to a valid entity to look-at');
             return;
@@ -148,7 +150,7 @@ AFRAME.registerComponent('dynamic-positionality', {
         }
         return self.beginTracking(targetEl);
     },
-    tick: (function (){
+    tick: (function () {
         return function (t) {
             // Track target object position. Depends on parent object keeping global transforms up
             // to state with updateMatrixWorld(). In practice, this is handled by the renderer.
@@ -163,10 +165,10 @@ AFRAME.registerComponent('dynamic-positionality', {
                 object3D.parent.worldToLocal(target3D.getWorldPosition(worldVector));
                 trackingVector = worldVector;
                 var distance = parentPosition.distanceTo(trackingVector);
-                var desiredZ = THREE.Math.clamp((1-distance), 0, 1);
+                var desiredZ = THREE.Math.clamp((1 - distance), 0, 1);
                 object3D.position.z = -desiredZ;
             }
-        }; 
+        };
     })(),
     beginTracking: function (targetEl) {
         this.target3D = targetEl.object3D;
@@ -200,8 +202,26 @@ AFRAME.registerComponent('selectable', {
 });
 
 AFRAME.registerComponent('plane-helper', {
-  init: function () {
-    var plane = new THREE.Plane( new THREE.Vector3(0, 0, 1).normalize(), 0.1);
-    this.el.setObject3D('helper', new THREE.PlaneHelper( plane, 1, 0xffff00 ));
-  }
+    init: function () {
+        var plane = new THREE.Plane(new THREE.Vector3(0, 0, 1).normalize(), 0.1);
+        this.el.setObject3D('helper', new THREE.PlaneHelper(plane, 1, 0xffff00));
+    }
+});
+
+AFRAME.registerComponent('desktop-only', {
+    init: function () {
+        var entity = this.el;
+        if (AFRAME.utils.device.checkHeadsetConnected()) {
+            entity.parentNode.removeChild(entity);
+        }
+    }
+});
+
+AFRAME.registerComponent('vr-only', {
+    init: function () {
+        var entity = this.el;
+        if (!AFRAME.utils.device.checkHeadsetConnected()) {
+            entity.parentNode.removeChild(entity);
+        }
+    }
 });
