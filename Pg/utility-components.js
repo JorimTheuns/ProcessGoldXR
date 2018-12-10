@@ -209,7 +209,7 @@ AFRAME.registerComponent('plane-helper', {
 });
 
 AFRAME.registerComponent('desktop-only', {
-    init: function () {
+    tick: function () {
         var entity = this.el;
         if (AFRAME.utils.device.checkHeadsetConnected()) {
             entity.parentNode.removeChild(entity);
@@ -218,7 +218,7 @@ AFRAME.registerComponent('desktop-only', {
 });
 
 AFRAME.registerComponent('vr-only', {
-    init: function () {
+    tick: function () {
         var entity = this.el;
         if (!AFRAME.utils.device.checkHeadsetConnected()) {
             entity.parentNode.removeChild(entity);
