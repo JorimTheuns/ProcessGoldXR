@@ -2,32 +2,94 @@ var debug = AFRAME.utils.debug;
 var coordinates = AFRAME.utils.coordinates;
 
 AFRAME.registerComponent('node-object', {
-  schema: {
-    width: {type: 'number', default: 1},
-    height: {type: 'number', default: 1},
-    depth: {type: 'number', default: 1},
-    color: {type: 'color', default: '#AAA'}
-  },
+    schema: {
+        width: {
+            type: 'number',
+            default: 1
+        },
+        height: {
+            type: 'number',
+            default: 1
+        },
+        depth: {
+            type: 'number',
+            default: 1
+        },
+        color: {
+            type: 'color',
+            default: '#AAA'
+        }
+    },
 
-  /**
-   * Initial creation and setting of the mesh.
-   */
-  init: function () {
-    var data = this.data;
-    var el = this.el;
+    /**
+     * Initial creation and setting of the mesh.
+     */
+    init: function () {
+        var data = this.data;
+        var el = this.el;
 
-    // Create geometry.
-    this.geometry = new THREE.BoxBufferGeometry(data.width, data.height, data.depth);
+        // Create geometry.
+        this.geometry = new THREE.PlaneGeometry(data.width, data.height);
 
-    // Create material.
-    this.material = new THREE.MeshStandardMaterial({color: data.color});
+        // Create material.
+        this.material = new THREE.MeshStandardMaterial({
+            color: data.color,
+            side: THREE.DoubleSide
+        });
 
-    // Create mesh.
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
+        // Create mesh.
+        this.mesh = new THREE.Mesh(this.geometry, this.material);
 
-    // Set mesh on entity.
-    console.log(el.object3D);
-  }
+        // Set mesh on entity.
+
+        this.forcegraphComponent = el.components.forcegraph;
+
+        this.links = this.forcegraphComponent.data.links;
+        this.nodes = this.forcegraphComponent.data.nodes;
+
+        this.xMax = d3.max(this.nodes, function (d) {
+            console.log(d.name + " " + d.x);
+            return d.x;
+        });
+        this.yMax = d3.max(this.nodes, function (d) {
+            console.log(d.name + " " + d.y);
+            return d.y;
+        })
+        this.yMin = d3.min(this.nodes, function (d) {
+            console.log(d.name + " " + d.y);
+            return d.y;
+        });
+
+
+        //Function that takes nodeData, finds absolute max distance from center
+        //creates scale that aligns all data around centerpoint
+
+        this.xScale = d3.scaleLinear()
+            .domain([0, this.xMax])
+            .range([0, 8000]);
+        this.yScale = d3.scaleLinear()
+            .domain([this.yMin, this.yMax])
+            .range([4000, 300]);
+    },
+    update: function ()
+    {
+        var forcegraphComponent = this.forcegraphComponent;
+        var el = this.el;
+        
+        console.log(this.links);
+        
+        AFRAME.utils.entity.setComponentProperty(el, 'forcegraph.nodeThreeObject', this.mesh);
+        forcegraphComponent.d3Force("x", d3.forceX().x(d => this.xScale(d.x)).strength(1));
+        forcegraphComponent.d3Force("y", d3.forceY().y(d => this.yScale(d.y)).strength(1));
+        
+        try {
+            forcegraphComponent.d3Force("link", d3.forceLink(this.links).id(d => d.id).distance(d => 1 / d.weight));
+        } catch (e) {
+            console.log(e);
+        }
+        
+        forcegraphComponent.d3Force('charge', d3.forceManyBody().strength(5));
+    }
 });
 
 var warn = debug('components:look-at-fixed-height:warn');

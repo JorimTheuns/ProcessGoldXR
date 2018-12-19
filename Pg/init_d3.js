@@ -17,7 +17,7 @@ d3.json("data.json", function (error, json) {
     edgeData = pgData.graph.edges;
 
     visualise();
-    
+
 });
 
 function visualise() {
@@ -151,7 +151,7 @@ function visualise() {
         .attr("class", "graph")
         .attr("id", "process-graph")
         .attr("position", "0 " + 1.6 + " 0");
-    
+
     scene.append("a-entity")
         .attr("mixin", "graph-parent")
         .attr("class", "graph")
@@ -160,8 +160,7 @@ function visualise() {
 
     var graph = scene.select("#process-graph");
 
-    var position = graph.append("a-box")
-        .attr("scale", "0.1 0.1 0.1");
+    //var position = graph.append("a-box").attr("scale", "0.1 0.1 0.1");
 
     var nodes = graph.selectAll("#nodes")
         .data(nodeData)
@@ -300,8 +299,8 @@ function visualise() {
                 } else {
                     let cP = [];
                     for (let k = 0; k < 4; k++) {
-                            cP[k] = new THREE.Vector3(p[k].x, p[k].y, p[k].z)
-                        }
+                        cP[k] = new THREE.Vector3(p[k].x, p[k].y, p[k].z)
+                    }
                     var start = getNodeCoordsOffset(d.fromnode, cP[0]);
                     var end = getNodeCoordsOffset(d.tonode, cP[3]);
                     controlPoints = [start, cP[1], cP[2], end];
@@ -319,14 +318,14 @@ function visualise() {
                     let j = i * 3;
                     let bezierControlPoints = [];
                     for (let k = 0; k < 4; k++) {
-                            bezierControlPoints[k] = new THREE.Vector3(p[k + j].x, p[k + j].y, p[k + j].z)
-                        }
-                    
+                        bezierControlPoints[k] = new THREE.Vector3(p[k + j].x, p[k + j].y, p[k + j].z)
+                    }
+
                     if (i == 0) {
                         var offset = new THREE.Vector3(p[0].x, p[0].y, p[0].z);
                         bezierControlPoints[0] = getNodeCoordsOffset(d.fromnode, offset);
                     } else if (i == numberOfCurves - 1) {
-                        var offset = new THREE.Vector3(p[p.length-1].x, p[p.length-1].y, p[p.length-1].z);
+                        var offset = new THREE.Vector3(p[p.length - 1].x, p[p.length - 1].y, p[p.length - 1].z);
                         bezierControlPoints[3] = getNodeCoordsOffset(d.tonode, offset);
                     }
                     var bezier = new THREE.CubicBezierCurve3(bezierControlPoints[0], bezierControlPoints[1], bezierControlPoints[2], bezierControlPoints[3]);
@@ -341,12 +340,12 @@ function visualise() {
             var toRad = getZ(d.tonode);
             var renderCurve = new THREE.CatmullRomCurve3();
             renderCurve.points = tP;
-            
+
             var tP = renderCurve.getSpacedPoints(500);
-            var stepsize = 1/tP.length;
-        
+            var stepsize = 1 / tP.length;
+
             for (let i = 0; i < tP.length; i++) {
-                curvyCoords[i] = getCurvyCoords(pScale(tP[i].x), tScale(tP[i].y), radius - zshift - THREE.Math.lerp(fromRad, toRad, stepsize*i));
+                curvyCoords[i] = getCurvyCoords(pScale(tP[i].x), tScale(tP[i].y), radius - zshift - THREE.Math.lerp(fromRad, toRad, stepsize * i));
             }
             for (let i = 0; i < tP.length - 1; i++) {
                 curvy_pathString += curvyCoords[i].x + ' ' + curvyCoords[i].y + ' ' + curvyCoords[i].z + ', ';
@@ -422,17 +421,18 @@ function visualise() {
                 pathstring = 'fromNode: #n' + d.fromnode + '; toNode: #n' + d.tonode + "; controlPoints: " + JSON.stringify(pathJSON) + "; catmull: true";
                 return pathstring
             })*/
-    
+
     var forcegraph = scene.select("#process-forcegraph");
-    
+
     forcegraph.append("a-entity")
         .attr("mixin", "graph-parent")
         .attr("class", "graph")
         .attr("id", "process-forcegraph")
         .attr("position", "0 0 1.5")
-        .attr("scale", "0.005 0.005 0.005")
-        .attr("forcegraph", "nodes: " + JSON.stringify(nodeData) + "; links: " + JSON.stringify(edgeData) + "; node-id: nodeid; link-source: fromnode; link-target: tonode; link-width: 1;")
-        .attr("node-object", "height: 1; width: 1; depth: 1;");
+        .attr("rotation", "0 180, 0")
+        .attr("scale", "0.01 0.01 0.01")
+        .attr("forcegraph", "nodes: " + JSON.stringify(nodeData) + "; links: " + JSON.stringify(edgeData) + "; node-id: nodeid; link-source: fromnode; link-target: tonode; link-width: 1; num-dimensions: 3")
+        .attr("node-object", "height: 9; width: 100;");
 }
 
 function getZ(id) {
@@ -449,12 +449,12 @@ function getNodeCoords(id) {
 
 function getNodeCoordsOffset(id, offsetvector) {
     var n = nodeData.find(x => x.nodeid === id);
-    
+
     //var w = n.w/2;
     //var width = (w / (1.5+zScale(n.weight)))*1.5;
-    
-    var w = wScale(n.w/2);
-    var width = wScale.invert((w / (1.5+zScale(n.weight)))*1.5);
+
+    var w = wScale(n.w / 2);
+    var width = wScale.invert((w / (1.5 + zScale(n.weight))) * 1.5);
     var height = 30;
 
     var newX = offsetvector.x;
@@ -464,8 +464,8 @@ function getNodeCoordsOffset(id, offsetvector) {
 
     var above = (offsetvector.y < n.y - height);
     var below = (offsetvector.y > n.y + height);
-    var left = (offsetvector.x < n.x - n.w/2);
-    var right = (offsetvector.x > n.x + n.w/2);
+    var left = (offsetvector.x < n.x - n.w / 2);
+    var right = (offsetvector.x > n.x + n.w / 2);
 
     if (left) {
         newX = n.x - width;
@@ -476,10 +476,10 @@ function getNodeCoordsOffset(id, offsetvector) {
         //newY = n.y;
         console.log("right");
     } else if (above) {
-        newY = n.y - height*2;
+        newY = n.y - height * 2;
         console.log("above");
     } else if (below) {
-        newY = n.y + height*2;
+        newY = n.y + height * 2;
         console.log("below");
     }
 
@@ -488,7 +488,7 @@ function getNodeCoordsOffset(id, offsetvector) {
 }
 
 function calcAngle(opposite, adjacent) {
-  return Math.atan(opposite / adjacent);
+    return Math.atan(opposite / adjacent);
 }
 
 function getCurvyCoords(x, y, radius) {
