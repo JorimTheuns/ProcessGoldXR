@@ -8,7 +8,7 @@ var pgData, nodeData, edgeData, wScale, tScale, zScale;
 //human readable floats
 var f = d3.format(".1f");
 
-d3.json("/vrdv.github.io/BPI2017All.json", function (error, json) {
+d3.json("data.json", function (error, json) {
     if (error)
         return console.warn(error);
     pgData = json;
@@ -17,6 +17,7 @@ d3.json("/vrdv.github.io/BPI2017All.json", function (error, json) {
     edgeData = pgData.graph.edges;
 
     visualise();
+    
 });
 
 function visualise() {
@@ -46,8 +47,8 @@ function visualise() {
     let eyeHeight = 0;
 
     //set max dimensions of curved flow chart (in degrees)
-    let maxTheta = 140;
-    let maxPhi = 180;
+    let maxTheta = 60;
+    let maxPhi = 90;
     let radius = 1.5;
 
     //Sets how far behind the nodes the edges will render in both flat and curved mode
@@ -149,6 +150,12 @@ function visualise() {
         .attr("mixin", "graph-parent")
         .attr("class", "graph")
         .attr("id", "process-graph")
+        .attr("position", "0 " + 1.6 + " 0");
+    
+    scene.append("a-entity")
+        .attr("mixin", "graph-parent")
+        .attr("class", "graph")
+        .attr("id", "process-forcegraph")
         .attr("position", "0 " + 1.6 + " 0");
 
     var graph = scene.select("#process-graph");
@@ -354,7 +361,7 @@ function visualise() {
             } else {
                 return flatPaths[index]
             }
-        })
+        });
     /*
             .append("a-entity")
             .attr('class', 'cancurve')
@@ -415,7 +422,17 @@ function visualise() {
                 pathstring = 'fromNode: #n' + d.fromnode + '; toNode: #n' + d.tonode + "; controlPoints: " + JSON.stringify(pathJSON) + "; catmull: true";
                 return pathstring
             })*/
-    ;
+    
+    var forcegraph = scene.select("#process-forcegraph");
+    
+    forcegraph.append("a-entity")
+        .attr("mixin", "graph-parent")
+        .attr("class", "graph")
+        .attr("id", "process-forcegraph")
+        .attr("position", "0 0 1.5")
+        .attr("scale", "0.005 0.005 0.005")
+        .attr("forcegraph", "nodes: " + JSON.stringify(nodeData) + "; links: " + JSON.stringify(edgeData) + "; node-id: nodeid; link-source: fromnode; link-target: tonode; link-width: 1;")
+        .attr("node-object", "height: 1; width: 1; depth: 1;");
 }
 
 function getZ(id) {
