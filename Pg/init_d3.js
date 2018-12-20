@@ -3,7 +3,7 @@ var darkBlue = "#176ab7";
 var lightGold = "#efe8dc";
 var lightBlue = "#E0E7F2";
 
-var pgData, nodeData, edgeData, wScale, tScale, zScale;
+var pgData, nodeData, edgeData, wScale, tScale, zScale, weightScale;
 
 //human readable floats
 var f = d3.format(".1f");
@@ -111,7 +111,7 @@ function visualise() {
     if (curve) {
         zScale = d3.scaleLinear()
             .domain(cExtent)
-            .range([-1.5, 0]);
+            .range([-radius, 0]);
     } else {
         zScale = d3.scaleLinear()
             .domain(cExtent)
@@ -133,9 +133,15 @@ function visualise() {
         return d.w
     });
 
-    wScale = d3.scaleLinear()
-        .domain(wExtent)
-        .range([0.35, 0.75]);
+    if (curve) {
+        wScale = d3.scaleLinear()
+            .domain(wExtent)
+            .range([0.32, 0.9]);
+    } else {
+        wScale = d3.scaleLinear()
+            .domain(wExtent)
+            .range([0.35, 0.75]);
+    }
 
     //Simple scale for lineWidth
     let lineWidthExtent = d3.extent(edgeData, function (d) {
@@ -145,6 +151,10 @@ function visualise() {
     var lwScale = d3.scaleLinear()
         .domain(lineWidthExtent)
         .range([3, 20]);
+
+    weightScale = d3.scaleLinear()
+        .domain(cExtent)
+        .range([2, 1]);
 
     scene.append("a-entity")
         .attr("mixin", "graph-parent")
@@ -194,7 +204,9 @@ function visualise() {
         //.attr('geometry', d => ('height: ' + 1 + ' ; width: ' + 1))
         .attr("material", d => ("color: " + colorBlue(d.weight)))
         .attr('text', d => ('value: ' + d.name + "; width: 1; color: " + getTextColor(colorBlue(d.weight)) + "; lineHeight: 52;"))
-        .attr("position", d => ("0 0 " + zScale(d.weight)));
+        .attr("position", d => ("0 0 " + zScale(d.weight)))
+    //.attr("scale", d => (weightScale(d.weight) + " " + weightScale(d.weight) + " 1"))
+    ;
 
     nodes
         .attr("animation__selectpos", d => ("from: 0 0 " + zScale(d.weight) + "; to: 0 0 0.5"))
@@ -202,44 +214,71 @@ function visualise() {
 
     nodes
         .on("animationcomplete", function (d) {
-            if (d3.event.detail.name == "animation__selectheight") {
-                d3.select(this).attr("text", d => ("value: " + d.name + "\n Weight: " + d.weight + "\n Frequency: " + d.selected.caseFreq + "\n" + f(d.selected.casePerc) + '%' + ";"))
+            if (this.is("selected")) {
+                if (d3.event.detail.name == "animation__selectheight") {
+                    d3.select(this).attr("text", d => ("value: " + d.name + "\n Weight: " + d.weight + "\n Frequency: " + d.selected.caseFreq + "\n" + f(d.selected.casePerc) + '%' + ";"))
+                }
+                this.components[d3.event.detail.name].animation.reset();
             }
-            this.components[d3.event.detail.name].animation.reset();
         })
         //Define dynamic behaviours
-        .on("grab-start", function (d) {
+        .on("grab-start", function (d, i) {
+            this.emit("select");
+            this.addState('selected');
+            emitToEdges(this, d, "select");
+            setColor(this, d, colorGold(d.weight));
+            //setText(this, d, "Loading");
             d3.select(this)
-                .attr("text", d => ("value: ;"))
-                .attr("material", d => ("color: " + colorGold(d.weight)))
-                //if hover ends while grabbed: keep color the same
-                .on("hover-end", function (d) {;
-                    //console.log("hover ended while grabbed");
-                })
-            //console.log("grab started");
+                .on("hover-end", function (d) {});
         })
         .on("grab-end", function (d) {
+            this.emit("deselect");
+            this.removeState('selected');
+            emitToEdges(this, d, "deselect");
+            setColor(this, d, colorBlue(d.weight));
+            setText(this, d, d.name);
             d3.select(this)
-                .attr("text", d => ("value: " + d.name + ";"))
-                .attr("material", d => ("color: " + colorBlue(d.weight)))
-                //if grab ends, reset hover end functionality
                 .on("hover-end", function (d) {
-                    d3.select(this)
-                        .attr("material", d => ("color: " + colorBlue(d.weight)));
-                    //console.log("hover ended");
+                    setColor(this, d, colorBlue(d.weight));
+                    emitToEdges(this, d, "deselect");
                 });
             //console.log("grab ended");
         })
         .on("hover-start", function (d) {
-            d3.select(this)
-                .attr("material", d => ("color: " + colorGold(d.weight)));
-            //console.log("hover started");
+            setColor(this, d, colorGold(d.weight));
+            emitToEdges(this, d, "select");
         })
         .on("hover-end", function (d) {
-            d3.select(this)
-                .attr("material", d => ("color: " + colorBlue(d.weight)));
-            //console.log("hover ended");
+            setColor(this, d, colorBlue(d.weight));
+            emitToEdges(this, d, "deselect");
+        })
+        .on("select", function (d) {
+            console.log("Selected" + d.name);
+        })
+        .on("deselect", function (d) {
+            console.log("Deselected" + d.name);
         });
+
+    var emitToEdges = function (el, d, event) {
+        var name = AFRAME.utils.entity.getComponentProperty(el, 'id');
+        name = '.' + name;
+        var edges = el.sceneEl.querySelectorAll(name);
+        for (var i = 0; i < edges.length; i++) {
+            edges[i].emit(event);
+        }
+    }
+
+    var setColor = function (el, d, color) {
+        if (el.classList.contains("edge")) {
+            d3.select(el).attr("color", d => (color));
+        } else {
+            d3.select(el).attr("material", d => ("color: " + color));
+        }
+    };
+
+    var setText = function (el, d, text) {
+        d3.select(el).attr("text", d => ("value: " + text + ";"))
+    };
 
     edges = graph.selectAll("#edges")
         .data(edgeData)
@@ -248,9 +287,8 @@ function visualise() {
         //CLASSIC PATH DRAW
 
         .append("a-jline")
-        .attr('class', 'cancurve')
         .attr('class', function (d) {
-            return 'cancurve n' + d.fromnode + ' n' + d.tonode + ' l' + d.fromnode + d.tonode + d.weight
+            return 'edge n' + d.fromnode + ' n' + d.tonode + ' l' + d.fromnode + d.tonode + d.weight
         })
         .attr('id', function (d) {
             return d.head + d.tail
@@ -314,24 +352,49 @@ function visualise() {
 
                 tP = catmullRom.getPoints(100);
             } else {
-                for (let i = 0; i < numberOfCurves; i++) {
-                    let j = i * 3;
+                if (d.fromnode == d.tonode) {
                     let bezierControlPoints = [];
+
+                    console.log("SELF NODE!");
+                    
+                    var n = nodeData.find(x => x.nodeid === d.fromnode);
+
+                    var aspect = wScale(n.w) / 0.09;
+
+                    var w = n.w / 2;
+                    var width = w / weightScale(n.weight);
+                    var height = ((w / aspect) / weightScale(n.weight)) * 3;
+                    var h = n.h / 2;
+                    console.log(w, width, height);
+
                     for (let k = 0; k < 4; k++) {
-                        bezierControlPoints[k] = new THREE.Vector3(p[k + j].x, p[k + j].y, p[k + j].z)
+                        bezierControlPoints[k] = new THREE.Vector3(p[k].x + w*0.5, p[k].y + h*0.5, p[k].z)
                     }
 
-                    if (i == 0) {
-                        var offset = new THREE.Vector3(p[0].x, p[0].y, p[0].z);
-                        bezierControlPoints[0] = getNodeCoordsOffset(d.fromnode, offset);
-                    } else if (i == numberOfCurves - 1) {
-                        var offset = new THREE.Vector3(p[p.length - 1].x, p[p.length - 1].y, p[p.length - 1].z);
-                        bezierControlPoints[3] = getNodeCoordsOffset(d.tonode, offset);
-                    }
                     var bezier = new THREE.CubicBezierCurve3(bezierControlPoints[0], bezierControlPoints[1], bezierControlPoints[2], bezierControlPoints[3]);
-                    var points = bezier.getSpacedPoints(10);
+                    var points = bezier.getSpacedPoints(30);
                     //points.pop();
                     tP.push(...points);
+                } else {
+                    for (let i = 0; i < numberOfCurves; i++) {
+                        let j = i * 3;
+                        let bezierControlPoints = [];
+                        for (let k = 0; k < 4; k++) {
+                            bezierControlPoints[k] = new THREE.Vector3(p[k + j].x, p[k + j].y, p[k + j].z)
+                        }
+
+                        if (i == 0) {
+                            var offset = new THREE.Vector3(p[1].x, p[1].y, p[1].z);
+                            bezierControlPoints[0] = getNodeCoordsOffset(d.fromnode, offset);
+                        } else if (i == numberOfCurves - 1) {
+                            var offset = new THREE.Vector3(p[j + 2].x, p[j + 2].y, p[j + 2].z);
+                            bezierControlPoints[3] = getNodeCoordsOffset(d.tonode, offset);
+                        }
+                        var bezier = new THREE.CubicBezierCurve3(bezierControlPoints[0], bezierControlPoints[1], bezierControlPoints[2], bezierControlPoints[3]);
+                        var points = bezier.getSpacedPoints(30);
+                        //points.pop();
+                        tP.push(...points);
+                    }
                 }
             }
 
@@ -341,7 +404,7 @@ function visualise() {
             var renderCurve = new THREE.CatmullRomCurve3();
             renderCurve.points = tP;
 
-            var tP = renderCurve.getSpacedPoints(500);
+            var tP = renderCurve.getSpacedPoints(200);
             var stepsize = 1 / tP.length;
 
             for (let i = 0; i < tP.length; i++) {
@@ -349,10 +412,10 @@ function visualise() {
             }
             for (let i = 0; i < tP.length - 1; i++) {
                 curvy_pathString += curvyCoords[i].x + ' ' + curvyCoords[i].y + ' ' + curvyCoords[i].z + ', ';
-                flat_pathString += xScale(tP[i].x) + ' ' + yScale(tP[i].y) + ' ' + -(zshift) + ', ';
+                flat_pathString += xScale(tP[i].x) + ' ' + yScale(tP[i].y) + ' ' + -(zshift + radius) + ', ';
             }
             curvy_pathString += curvyCoords[tP.length - 1].x + ' ' + curvyCoords[tP.length - 1].y + ' ' + curvyCoords[tP.length - 1].z;
-            flat_pathString += xScale(tP[tP.length - 1].x) + ' ' + yScale(tP[tP.length - 1].y) + ' ' + (-zshift);
+            flat_pathString += xScale(tP[tP.length - 1].x) + ' ' + yScale(tP[tP.length - 1].y) + ' ' + -(zshift + radius);
             curvyPaths[index] = curvy_pathString;
             flatPaths[index] = flat_pathString;
             if (curve) {
@@ -360,7 +423,13 @@ function visualise() {
             } else {
                 return flatPaths[index]
             }
-        });
+        })
+        .on("select", function (d) {
+            setColor(this, d, colorGold(d.weight));
+        })
+        .on("deselect", function (d) {
+            setColor(this, d, colorBlue(d.weight));
+        });;
     /*
             .append("a-entity")
             .attr('class', 'cancurve')
@@ -421,18 +490,18 @@ function visualise() {
                 pathstring = 'fromNode: #n' + d.fromnode + '; toNode: #n' + d.tonode + "; controlPoints: " + JSON.stringify(pathJSON) + "; catmull: true";
                 return pathstring
             })*/
+    /*
+        var forcegraph = scene.select("#process-forcegraph");
 
-    var forcegraph = scene.select("#process-forcegraph");
-
-    forcegraph.append("a-entity")
-        .attr("mixin", "graph-parent")
-        .attr("class", "graph")
-        .attr("id", "process-forcegraph")
-        .attr("position", "0 0 1.5")
-        .attr("rotation", "0 180, 0")
-        .attr("scale", "0.01 0.01 0.01")
-        .attr("forcegraph", "nodes: " + JSON.stringify(nodeData) + "; links: " + JSON.stringify(edgeData) + "; node-id: nodeid; link-source: fromnode; link-target: tonode; link-width: 1; num-dimensions: 3")
-        .attr("node-object", "height: 9; width: 100;");
+        forcegraph.append("a-entity")
+            .attr("mixin", "graph-parent")
+            .attr("class", "graph")
+            .attr("id", "process-forcegraph")
+            .attr("position", "0 0 1.5")
+            .attr("rotation", "0 180, 0")
+            .attr("scale", "0.01 0.01 0.01")
+            .attr("forcegraph", "nodes: " + JSON.stringify(nodeData) + "; links: " + JSON.stringify(edgeData) + "; node-id: nodeid; link-source: fromnode; link-target: tonode; link-width: 1; num-dimensions: 3")
+            .attr("node-object", "height: 9; width: 100;");*/
 }
 
 function getZ(id) {
@@ -450,38 +519,62 @@ function getNodeCoords(id) {
 function getNodeCoordsOffset(id, offsetvector) {
     var n = nodeData.find(x => x.nodeid === id);
 
+
+    var aspect = wScale(n.w) / 0.09;
+
+    var w = n.w / 2;
+    var width = w / weightScale(n.weight);
+    var height = ((w / aspect) / weightScale(n.weight)) * 3;
+    var h = n.h / 2;
+
+    console.log(n.name, n.w, wScale(n.w));
+
+    /*
+    console.log(n.name);
+    console.log("aspect: " + aspect + "; calcH: " + n.w / aspect + "; h: " + n.h + "; w: " + n.w + "; Scaled w: " + wScale(n.w) + "; weight: " + weightScale(n.weight));
+    console.log("height: " + height + "; width: " + width + "; Scaled w: " + w);
+    console.log("x: " + n.x + "; y: " + n.y + "; offset x: " + offsetvector.x + "; offset y: " + offsetvector.y);
+    
+    */
     //var w = n.w/2;
     //var width = (w / (1.5+zScale(n.weight)))*1.5;
-
-    var w = wScale(n.w / 2);
-    var width = wScale.invert((w / (1.5 + zScale(n.weight))) * 1.5);
-    var height = 30;
 
     var newX = offsetvector.x;
     var newY = offsetvector.y;
 
     var nodeCoords = new THREE.Vector3();
 
-    var above = (offsetvector.y < n.y - height);
-    var below = (offsetvector.y > n.y + height);
-    var left = (offsetvector.x < n.x - n.w / 2);
-    var right = (offsetvector.x > n.x + n.w / 2);
+    var a = (offsetvector.y < n.y);
+    var b = (offsetvector.y > n.y);
+    var va = (offsetvector.y < n.y - h);
+    var vb = (offsetvector.y > n.y + h);
 
-    if (left) {
+    var l = (offsetvector.x < n.x);
+    var r = (offsetvector.x > n.x);
+    var vl = (offsetvector.x < n.x - width*0.7);
+    var vr = (offsetvector.x > n.x + width*0.7);
+
+    console.log("va: " + va + "; vb: " + vb + "; vl: " + vl + "; vr: " + vr);
+
+    if (va && (!vl && !vr)) {
+        newY = n.y - height;
+        console.log("a");
+    }
+    if (vb && (!vl && !vr)) {
+        newY = n.y + height;
+        console.log("b");
+    }
+    if (vl) {
         newX = n.x - width;
         //newY = n.y;
-        console.log("left");
-    } else if (right) {
+        console.log("l");
+    }
+    if (vr) {
         newX = n.x + width;
         //newY = n.y;
-        console.log("right");
-    } else if (above) {
-        newY = n.y - height * 2;
-        console.log("above");
-    } else if (below) {
-        newY = n.y + height * 2;
-        console.log("below");
+        console.log("r");
     }
+
 
     nodeCoords.set(newX, newY, 0);
     return nodeCoords
