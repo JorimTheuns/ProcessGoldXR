@@ -27,7 +27,7 @@
 </head>
 
 <body>
-    <a-scene environment="preset: goldmine; dressingColor: #db8a00; dressingAmount: 0; grid: none; gridColor: #db8a00; groundColor: #EFE8DC; skyColor:#176ab7; horizonColor: #E0E7F2" antialias="true">
+    <a-scene environment="dressingColor: #db8a00; dressingAmount: 0; grid: none; groundColor: #788082; skyColor:#176ab7; horizonColor: #E0E7F2; groundColor2: #a1abad; groundTexture: walkernoise" antialias="true">
         <!--<a-scene debug="true">-->
         <a-assets>
             <a-mixin id="pointer" raycaster="showLine: true; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
@@ -56,7 +56,7 @@
 
         <a-entity>
             <a-camera wasd-controls="fly: true">
-                <a-entity id="point-light" class="light" light="type: point; intensity: 0.1"></a-entity>
+                <a-entity id="point-light" class="light" light="type: point; intensity: 0.5"></a-entity>
                 <a-cursor id="cursor" mixin="pointer" desktop-only></a-cursor>
             </a-camera>
             <a-entity id="rhand" mixin="controller-right" vr-only></a-entity>
