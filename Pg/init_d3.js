@@ -49,7 +49,7 @@ function visualise() {
     //set max dimensions of curved flow chart (in degrees)
     let maxTheta = 60;
     let maxPhi = 90;
-    let radius = 1.5;
+    let radius = 1;
 
     //Sets how far behind the nodes the edges will render in both flat and curved mode
     let zshift = 0;
@@ -136,11 +136,11 @@ function visualise() {
     if (curve) {
         wScale = d3.scaleLinear()
             .domain(wExtent)
-            .range([0.32, 0.9]);
+            .range([0.38, 0.9]);
     } else {
         wScale = d3.scaleLinear()
             .domain(wExtent)
-            .range([0.35, 0.75]);
+            .range([0.4, 0.75]);
     }
 
     //Simple scale for lineWidth
@@ -203,7 +203,7 @@ function visualise() {
         //BEZIER TEST GEO
         //.attr('geometry', d => ('height: ' + 1 + ' ; width: ' + 1))
         .attr("material", d => ("color: " + colorBlue(d.weight)))
-        .attr('text', d => ('value: ' + d.name + "; width: 1; color: " + getTextColor(colorBlue(d.weight)) + "; lineHeight: 52;"))
+        .attr('text', d => ('value: ' + d.name + "; width: 1.2; color: " + getTextColor(colorBlue(d.weight)) + "; lineHeight: 52;"))
         .attr("position", d => ("0 0 " + zScale(d.weight)))
     //.attr("scale", d => (weightScale(d.weight) + " " + weightScale(d.weight) + " 1"))
     ;
@@ -429,7 +429,7 @@ function visualise() {
         })
         .on("deselect", function (d) {
             setColor(this, d, colorBlue(d.weight));
-        });;
+        });
     /*
             .append("a-entity")
             .attr('class', 'cancurve')
@@ -516,11 +516,75 @@ function getNodeCoords(id) {
     return nodeCoords
 }
 
-function getNodeCoordsOffset(id, offsetvector) {
+function getSelfLinkCoordsOffset(id, offsetvector) {
     var n = nodeData.find(x => x.nodeid === id);
 
 
     var aspect = wScale(n.w) / 0.09;
+
+    var w = n.w / 2;
+    var width = w / weightScale(n.weight);
+    var height = ((w / aspect) / weightScale(n.weight)) * 3;
+    var h = n.h / 2;
+
+    console.log(n.name, n.w, wScale(n.w));
+
+    /*
+    console.log(n.name);
+    console.log("aspect: " + aspect + "; calcH: " + n.w / aspect + "; h: " + n.h + "; w: " + n.w + "; Scaled w: " + wScale(n.w) + "; weight: " + weightScale(n.weight));
+    console.log("height: " + height + "; width: " + width + "; Scaled w: " + w);
+    console.log("x: " + n.x + "; y: " + n.y + "; offset x: " + offsetvector.x + "; offset y: " + offsetvector.y);
+    
+    */
+    //var w = n.w/2;
+    //var width = (w / (1.5+zScale(n.weight)))*1.5;
+
+    var newX = offsetvector.x;
+    var newY = offsetvector.y;
+
+    var nodeCoords = new THREE.Vector3();
+
+    var a = (offsetvector.y < n.y);
+    var b = (offsetvector.y > n.y);
+    var va = (offsetvector.y < n.y - h);
+    var vb = (offsetvector.y > n.y + h);
+
+    var l = (offsetvector.x < n.x);
+    var r = (offsetvector.x > n.x);
+    var vl = (offsetvector.x < n.x - width*0.7);
+    var vr = (offsetvector.x > n.x + width*0.7);
+
+    console.log("va: " + va + "; vb: " + vb + "; vl: " + vl + "; vr: " + vr);
+
+    if (va && (!vl && !vr)) {
+        newY = n.y - height;
+        console.log("a");
+    }
+    if (vb && (!vl && !vr)) {
+        newY = n.y + height;
+        console.log("b");
+    }
+    if (vl) {
+        newX = n.x - width;
+        //newY = n.y;
+        console.log("l");
+    }
+    if (vr) {
+        newX = n.x + width;
+        //newY = n.y;
+        console.log("r");
+    }
+
+
+    nodeCoords.set(newX, newY, 0);
+    return nodeCoords
+}
+
+function getNodeCoordsOffset(id, offsetvector) {
+    var n = nodeData.find(x => x.nodeid === id);
+
+
+    var aspect = wScale(n.w) / 0.12;
 
     var w = n.w / 2;
     var width = w / weightScale(n.weight);
