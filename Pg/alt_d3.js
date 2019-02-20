@@ -1,7 +1,7 @@
-var darkGold = "#db8a00";
-var darkBlue = "#176ab7";
-var lightGold = "#efe8dc";
-var lightBlue = "#E0E7F2";
+var darkGold = "#cc8100";
+var darkBlue = "#1f73c2";
+var lightGold = "#ffd282";
+var lightBlue = "#adcdff";
 
 var pgData, nodeData, edgeData;
 //human readable floats
@@ -178,12 +178,12 @@ function processGraph() {
 
             var cartesianPos = new THREE.Vector3();
             cartesianPos.setFromSpherical(sphericalPos);
-            console.log({
+            /*console.log({
                 x,
                 y,
                 sphericalPos,
                 cartesianPos
-            });
+            });*/
             return cartesianPos.x + ' ' + cartesianPos.y + ' ' + cartesianPos.z
         })
         .append("a-entity")
@@ -202,8 +202,8 @@ function processGraph() {
     nodes
         .attr("animation__selectpos", d => ("from: 0 0 " + depthScale(d.weight) + "; to: 0 0 0.5"))
         .attr("animation__deselectpos", d => ("from: 0 0 0.5; to: 0 0 " + depthScale(d.weight) + ";"))
-        .attr("animation__selectheight", d => ("from: " + masterScale(d.h) /2 + "; to: " + masterScale(d.h) *2 + ";"))
-        .attr("animation__deselectheight", d => ("from: " + masterScale(d.h) *2 + "; to: " + masterScale(d.h) / 2 + ";"))
+        .attr("animation__selectheight", d => ("from: " + masterScale(d.h) / 2 + "; to: " + masterScale(d.h) * 2 + ";"))
+        .attr("animation__deselectheight", d => ("from: " + masterScale(d.h) * 2 + "; to: " + masterScale(d.h) / 2 + ";"))
         .attr("animation__deselectscale", d => ("from: 1 1 1; to: " + readScale(d.weight) + " " + readScale(d.weight) + " 1"))
         .attr("animation__selectscale", d => ("from: " + readScale(d.weight) + " " + readScale(d.weight) + " 1; to: 1 1 1;"));
 
@@ -344,8 +344,11 @@ function processGraph() {
             let curvyCoords = [];
             var renderCurve = new THREE.CatmullRomCurve3();
             renderCurve.points = tP;
+        
+            let length = renderCurve.getLength();
+            console.log("length", length*numberOfCurves);
 
-            var tP = renderCurve.getSpacedPoints(50);
+            var tP = renderCurve.getSpacedPoints(length*200);
 
             var stepsize = 1 / tP.length;
 
@@ -362,11 +365,12 @@ function processGraph() {
                 tP[i].z = cartesian.z;
             }
 
-            for (let i = 0; i < tP.length - 2; i++) {
+            for (let i = 0; i < tP.length - 10; i++) {
                 curvy_pathString += tP[i].x + ' ' + tP[i].y + ' ' + tP[i].z + ', ';
             }
-            curvy_pathString += tP[tP.length - 1].x + ' ' + tP[tP.length - 1].y + ' ' + tP[tP.length - 1].z;
+            curvy_pathString += tP[tP.length - 9].x + ' ' + tP[tP.length - 9].y + ' ' + tP[tP.length - 9].z;
             curvyPaths[index] = curvy_pathString;
+            addTriangle(this, d, tP[tP.length - 9], tP[tP.length - 1]);
             return curvy_pathString;
         })
         .on("select", function (d) {
@@ -375,6 +379,38 @@ function processGraph() {
         .on("deselect", function (d) {
             setColor(this, d, colorBlue(d.weight));
         });
+
+    function addTriangle(el, d, first, second) {
+        
+        d3.select(el).append("a-jline")
+        .attr('class', function (d) {
+            return 'edge n' + d.fromnode + ' n' + d.tonode + ' l' + d.fromnode + d.tonode + d.weight
+        })
+        .attr('id', function (d) {
+            return d.head + d.tail
+        })
+        .attr('color', function (d) {
+            //console.log("linewidth should be: " + f(lwScale(d.weight)));
+            return colorBlue(d.weight)
+        })
+        .attr('linewidth', function (d) {
+            //console.log("linewidth should be: " + f(lwScale(d.weight)));
+            return lineWidthScale(d.weight)*3
+        })
+        .attr('linewidthstyler', "1-p")
+        //.attr('linewidth', '100')
+        .attr("path", makeStringFromVectors(first, second))
+        .on("select", function (d) {
+            setColor(this, d, colorGold(d.weight));
+        })
+        .on("deselect", function (d) {
+            setColor(this, d, colorBlue(d.weight));
+        });;
+    }
+    
+    function makeStringFromVectors(a, b){
+        return a.x + " " + a.y + " " + a.z + ", " + b.x + " " + b.y + " " + b.z;
+    }
 }
 
 function getTextColor(c) {

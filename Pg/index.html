@@ -3,7 +3,7 @@
 
     <meta http-equiv="Cache-control" content="no-cache">
 
-    <script src="https://aframe.io/releases/0.8.2/aframe.min.js"></script>
+    <script src="https://aframe.io/releases/0.9.0/aframe.min.js"></script>
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
 
@@ -21,48 +21,50 @@
     <script src="https://unpkg.com/aframe-look-at-component@0.5.1/dist/aframe-look-at-component.min.js"></script>
     <script src="https://unpkg.com/aframe-forcegraph-component/dist/aframe-forcegraph-component.min.js"></script>
 
-    <script src="aframe-animation-component.js"></script>
+    <!---<script src="aframe-animation-component.js"></script>--->
     <script src="graph-depth-component.js"></script>
+    <meta charset="UTF-8">
 
 </head>
 
 <body>
-    <a-scene environment="dressingColor: #db8a00; dressingAmount: 0; grid: none; groundColor: #90999b; skyColor:#176ab7; horizonColor: #E0E7F2; groundColor2: #a1abad; groundTexture: walkernoise" antialias="true">
-        <!--<a-scene debug="true">-->
-        <a-assets>
-            <a-mixin id="pointer" raycaster="showLine: true; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
+        <a-scene class="ascene" style="margin: auto" environment="dressingColor: #db8a00; dressingAmount: 0; grid: none; groundColor: #90999b; skyColor:#176ab7; horizonColor: #E0E7F2; groundColor2: #a1abad; groundTexture: walkernoise" renderer="antialias: true">
+            <!--<a-scene debug="true">-->
+            <a-assets>
+                <a-mixin id="pointer" raycaster="showLine: true; objects: .node, a-link" super-hands="colliderEvent: raycaster-intersection;
                                colliderEventProperty: els;
                                colliderEndEvent:raycaster-intersection-cleared;
                                colliderEndEventProperty: clearedEls;">
-            </a-mixin>
-            <a-mixin id="controller-right" mixin="pointer" vive-controls="hand: right" oculus-touch-controls="hand: right" windows-motion-controls="hand: right" gearvr-controls daydream-controls="hand: right; buttonColor: #E0E7F2; buttonTouchedColor: #176ab7; buttonHighlightColor: #db8a00" oculus-go-controls>
-            </a-mixin>
-            <a-mixin id="controller-left" mixin="pointer" vive-controls="hand: left" oculus-touch-controls="hand: left" windows-motion-controls="hand: left">
-            </a-mixin>
+                </a-mixin>
+                <a-mixin id="controller-right" mixin="pointer" vive-controls="hand: right" oculus-touch-controls="hand: right" windows-motion-controls="hand: right" gearvr-controls daydream-controls="hand: right; buttonColor: #E0E7F2; buttonTouchedColor: #176ab7; buttonHighlightColor: #db8a00" oculus-go-controls>
+                </a-mixin>
+                <a-mixin id="controller-left" mixin="pointer" vive-controls="hand: left" oculus-touch-controls="hand: left" windows-motion-controls="hand: left">
+                </a-mixin>
 
-            <a-mixin id="graph-parent" graph-depth="1"></a-mixin>
+                <a-mixin id="graph-parent" graph-depth="1"></a-mixin>
 
-            <a-mixin id="node-parent" look-at="0 0 0"></a-mixin>
+                <a-mixin id="node-parent" look-at="0 1.6 0"></a-mixin>
 
-            <a-mixin id="dynamic-plane" geometry="primitive: plane; width: 0.5; height: 0.15" hoverable selectable clickable material="color:#ddd; side:double" text="value: default; color: white; align: center" event-set__hoveron="_event: hover-start;" event-set__hoveroff="_event: hover-end;" event-set__grabon="_event: grab-start; material.opacity: 0.7; transparent: true" event-set__graboff="_event: grab-end; material.opacity: 1; transparent: false"></a-mixin>
+                <a-mixin id="dynamic-plane" geometry="primitive: plane; width: 0.5; height: 0.15" hoverable selectable clickable material="color:#ddd; side:double" text="value: default; font: fonts/nexa-book-msdf.json; negate: false; color: white; align: center" event-set__hoveron="_event: hover-start;" event-set__hoveroff="_event: hover-end;" event-set__grabon="_event: grab-start; material.opacity: 0.7; transparent: true" event-set__graboff="_event: grab-end; material.opacity: 1; transparent: false"></a-mixin>
 
-            <a-mixin id="node-element" mixin="dynamic-plane" animation__selectpos="startEvents: grab-start; property: position; dir: alternate; dur: 500; loop: false; easing: easeInOutQuad; from: 0 0 0; to: 0 0 0.1" animation__deselectpos="startEvents: grab-end; property: position; dir: alternate; dur: 500;loop: false; easing: easeInOutQuad; from: 0 0 0.1; to: 0 0 0" animation__selectscale="startEvents: grab-start; property: scale; dir: alternate; dur: 500; loop: false; easing: easeInOutQuad; from: 0 0 0; to: 0 0 0.1" animation__deselectscale="startEvents: grab-end; property: scale; dir: alternate; dur: 500;loop: false; easing: easeInOutQuad; from: 0 0 0.1; to: 0 0 0" animation__selectheight="startEvents: grab-start; property: geometry.height; dir: alternate; dur: 500; loop: false; easing: easeInOutQuad; from: 0.09; to: 0.27" animation__deselectheight="startEvents: grab-end; property: geometry.height; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: 0.27; to: 0.09">
-            </a-mixin>
+                <a-mixin id="node-element" mixin="dynamic-plane" 
+                         animation__selectpos="startEvents: grab-start; property: position; dir: alternate; dur: 500; loop: false; easing: easeInOutQuad; from: 0 0 0; to: 0 0 0.1" animation__deselectpos="startEvents: grab-end; property: position; dir: alternate; dur: 500;loop: false; easing: easeInOutQuad; from: 0 0 0.1; to: 0 0 0" animation__selectscale="startEvents: grab-start; property: scale; dir: alternate; dur: 500; loop: false; easing: easeInOutQuad; from: 0 0 0; to: 0 0 0.1" animation__deselectscale="startEvents: grab-end; property: scale; dir: alternate; dur: 500;loop: false; easing: easeInOutQuad; from: 0 0 0.1; to: 0 0 0" animation__selectheight="startEvents: grab-start; property: geometry.height; dir: alternate; dur: 500; loop: false; easing: easeInOutQuad; from: 0.09; to: 0.27" animation__deselectheight="startEvents: grab-end; property: geometry.height; dir: alternate; dur: 200; loop: false; easing: easeInOutQuad; from: 0.27; to: 0.09">
+                </a-mixin>
 
-            <a-mixin id="trace-parent"></a-mixin>
-
-
-        </a-assets>
-
-        <a-entity>
-            <a-camera wasd-controls="fly: true">
-                <a-entity id="point-light" class="light" light="type: point; intensity: 0.5"></a-entity>
-                <a-cursor id="cursor" mixin="pointer" desktop-only></a-cursor>
-            </a-camera>
-            <a-entity id="rhand" mixin="controller-right" vr-only></a-entity>
-        </a-entity>
+                <a-mixin id="trace-parent"></a-mixin>
 
 
-    </a-scene>
+            </a-assets>
+
+            <a-entity>
+                <a-camera wasd-controls="fly: true">
+                    <a-entity id="point-light" class="light" light="type: point; intensity: 0.5"></a-entity>
+                    <a-cursor id="cursor" mixin="pointer" desktop-only></a-cursor>
+                </a-camera>
+                <a-entity id="rhand" mixin="controller-right" vr-only></a-entity>
+            </a-entity>
+
+
+        </a-scene>
     <script src="alt_d3.js"></script>
 </body>

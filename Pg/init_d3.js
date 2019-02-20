@@ -42,37 +42,37 @@ function visualise() {
     var lineColor = "#2F86DA";
 
     //Set max dimensions of flat flow chart
-    let maxWidth = 1.9;
-    let maxHeight = 2.5;
-    let eyeHeight = 0;
+    var maxWidth = 1.9;
+    var maxHeight = 2.5;
+    var eyeHeight = 0;
 
     //set max dimensions of curved flow chart (in degrees)
-    let maxTheta = 60;
-    let maxPhi = 90;
-    let radius = 1;
+    var maxTheta = 60;
+    var maxPhi = 90;
+    var radius = 1;
 
     //Sets how far behind the nodes the edges will render in both flat and curved mode
-    let zshift = 0;
+    var zshift = 0;
 
     //not sure
-    let depthFactor = 0.3;
-    let animateScale = 1;
+    var depthFactor = 0.3;
+    var animateScale = 1;
 
     //sets the maximum complexity of the animation. Used to optimise FPS
-    let lineResolution = 20;
-    let showLabels = true;
-    let animateDepth = true;
+    var lineResolution = 20;
+    var showLabels = true;
+    var animateDepth = true;
 
     //Function that takes nodeData, finds absolute max distance from center
     //creates scale that aligns all data around centerpoint
-    let xShift = pgData.graph.centralpoint.x;
-    let xmax = d3.max(nodeData, function (d) {
+    var xShift = pgData.graph.centralpoint.x;
+    var xmax = d3.max(nodeData, function (d) {
         return d.x
     });
-    let xmin = d3.min(nodeData, function (d) {
+    var xmin = d3.min(nodeData, function (d) {
         return d.x
     });
-    let xAbsMax = Math.max(Math.abs(xShift - xmax), Math.abs(xShift - xmin));
+    var xAbsMax = Math.max(Math.abs(xShift - xmax), Math.abs(xShift - xmin));
     var xScale = d3.scaleLinear()
         .domain([xShift, xShift + xAbsMax])
         .range([0, maxWidth / 2]);
@@ -80,14 +80,14 @@ function visualise() {
     //almost same as xScale
     //limits between 0 and maxheight
     //inverts the y axis
-    let yShift = pgData.graph.centralpoint.y;
-    let ymax = d3.max(nodeData, function (d) {
+    var yShift = pgData.graph.centralpoint.y;
+    var ymax = d3.max(nodeData, function (d) {
         return d.y
     });
-    let ymin = d3.min(nodeData, function (d) {
+    var ymin = d3.min(nodeData, function (d) {
         return d.y
     });
-    let yAbsMax = Math.max(Math.abs(yShift - ymax), Math.abs(yShift - ymin));
+    var yAbsMax = Math.max(Math.abs(yShift - ymax), Math.abs(yShift - ymin));
     var yScale = d3.scaleLinear()
         .domain([yShift + yAbsMax, yShift - yAbsMax])
         .range([-maxHeight / 2, maxHeight / 2]);
@@ -104,7 +104,7 @@ function visualise() {
         .range([0, (maxTheta)]);
 
     //Simple Scale for Color
-    let cExtent = d3.extent(nodeData, function (d) {
+    var cExtent = d3.extent(nodeData, function (d) {
         return d.weight;
     });
 
@@ -129,7 +129,7 @@ function visualise() {
         .range([d3.rgb(lightGold), d3.rgb(darkGold)]);
 
     //Simple Scale for Width
-    let wExtent = d3.extent(nodeData, function (d) {
+    var wExtent = d3.extent(nodeData, function (d) {
         return d.w
     });
 
@@ -144,7 +144,7 @@ function visualise() {
     }
 
     //Simple scale for lineWidth
-    let lineWidthExtent = d3.extent(edgeData, function (d) {
+    var lineWidthExtent = d3.extent(edgeData, function (d) {
         return d.weight
     });
 
@@ -178,7 +178,7 @@ function visualise() {
         .append("a-entity")
         .attr("mixin", "node-parent")
         .attr("class", "node-parent")
-        .attr("id", d => ('p' + d.nodeid))
+        .attr("id", d => {'p' + d.nodeid})
         .attr("position", function (d, index) {
             connectedTails[index] = edges.filter(function (eD) {
                 return eD.tail == d.name
