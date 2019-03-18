@@ -70,21 +70,21 @@ animation-delay: 1.4s;
 }
  
 .two {
+-webkit-animation-delay: 1.6s;
+-moz-animation-delay: 1.6s;
+animation-delay: 1.6s;
+}
+ 
+.three {
 -webkit-animation-delay: 1.8s;
 -moz-animation-delay: 1.8s;
 animation-delay: 1.8s;
 }
  
-.three {
--webkit-animation-delay: 2.2s;
--moz-animation-delay: 2.2s;
-animation-delay: 2.2s;
-}
- 
 .four {
--webkit-animation-delay: 4s;
--moz-animation-delay: 4s;
-animation-delay: 4s;
+-webkit-animation-delay: 3s;
+-moz-animation-delay: 3s;
+animation-delay: 3s;
 }
  
 /*=== Animations start here  ===*/

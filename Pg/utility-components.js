@@ -428,3 +428,15 @@ AFRAME.registerComponent('vr-only', {
         }
     }
 });
+
+AFRAME.registerComponent('6dof-only', {
+    tick: function () {
+        var entity = this.el;
+        if (!AFRAME.utils.device.checkHeadsetConnected()) {
+            entity.parentNode.removeChild(entity);
+        }
+        if (AFRAME.utils.device.isMobile()) {
+            entity.parentNode.removeChild(entity);
+        }
+    }
+});
