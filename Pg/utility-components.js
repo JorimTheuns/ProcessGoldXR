@@ -71,23 +71,22 @@ AFRAME.registerComponent('node-object', {
             .domain([this.yMin, this.yMax])
             .range([4000, 300]);
     },
-    update: function ()
-    {
+    update: function () {
         var forcegraphComponent = this.forcegraphComponent;
         var el = this.el;
-        
+
         console.log(this.links);
-        
+
         AFRAME.utils.entity.setComponentProperty(el, 'forcegraph.nodeThreeObject', this.mesh);
         forcegraphComponent.d3Force("x", d3.forceX().x(d => this.xScale(d.x)).strength(1));
         forcegraphComponent.d3Force("y", d3.forceY().y(d => this.yScale(d.y)).strength(1));
-        
+
         try {
             forcegraphComponent.d3Force("link", d3.forceLink(this.links).id(d => d.id).distance(d => 1 / d.weight));
         } catch (e) {
             console.log(e);
         }
-        
+
         forcegraphComponent.d3Force('charge', d3.forceManyBody().strength(5));
     }
 });
@@ -412,17 +411,18 @@ AFRAME.registerComponent('plane-helper', {
 });
 
 AFRAME.registerComponent('desktop-only', {
-    init: function () {
+    tick: function () {
         var entity = this.el;
         if (AFRAME.utils.device.checkHeadsetConnected()) {
-            if (!AFRAME.utils.device.isMobile()){
-            entity.parentNode.removeChild(entity);
-        }}
+            if (!AFRAME.utils.device.isMobile()) {
+                entity.parentNode.removeChild(entity);
+            }
+        }
     }
 });
 
 AFRAME.registerComponent('vr-only', {
-    init: function () {
+    tick: function () {
         var entity = this.el;
         if (!AFRAME.utils.device.checkHeadsetConnected()) {
             entity.parentNode.removeChild(entity);
@@ -431,12 +431,12 @@ AFRAME.registerComponent('vr-only', {
 });
 
 AFRAME.registerComponent('6dof-only', {
-    init: function () {
+    tick: function () {
         var entity = this.el;
         if (!AFRAME.utils.device.checkHeadsetConnected()) {
             entity.parentNode.removeChild(entity);
         }
-        if (AFRAME.utils.device.isMobile()) {
+        else if (AFRAME.utils.device.isMobile()) {
             entity.parentNode.removeChild(entity);
         }
     }
