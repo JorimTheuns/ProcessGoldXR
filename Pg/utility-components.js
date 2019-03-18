@@ -414,7 +414,7 @@ AFRAME.registerComponent('plane-helper', {
 AFRAME.registerComponent('desktop-only', {
     tick: function () {
         var entity = this.el;
-        if (AFRAME.utils.device.checkHeadsetConnected()) {
+        if (AFRAME.utils.device.checkHeadsetConnected() && !AFRAME.utils.device.isMobile()) {
             entity.parentNode.removeChild(entity);
         }
     }
