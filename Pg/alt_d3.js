@@ -40,7 +40,7 @@ function barChart() {
         .attr("class", "graph")
         .attr("id", "bar-graph")
         .attr("position", "1.4 1 0")
-        .attr("look-at", "0 1.6 0");;
+        .attr("look-at", "#view-point");;
 
     var graph = scene.select("#bar-graph");
 
@@ -150,8 +150,7 @@ function processGraph() {
     scene.append("a-entity")
         .attr("mixin", "graph-parent")
         .attr("class", "graph")
-        .attr("id", "process-graph")
-        .attr("position", "0 " + 1.6 + " 0");
+        .attr("id", "process-graph");
 
     var graph = scene.select("#process-graph");
 
@@ -195,7 +194,7 @@ function processGraph() {
         //BEZIER TEST GEO
         //.attr('geometry', d => ('height: ' + 1 + ' ; width: ' + 1))
         .attr("material", d => ("color: " + colorBlue(d.weight)))
-        .attr('text', d => ('value: ' + d.name + "; color: " + getTextColor(colorBlue(d.weight)) + "; width: 0.7; lineHeight: 52;"))
+        .attr('text', d => ('value: ' + d.name + "; color: " + getTextColor(colorBlue(d.weight)) + "; width: 0.6; lineHeight: 52;"))
         .attr("position", d => ("0 0 " + depthScale(d.weight)))
         .attr("scale", d => (readScale(d.weight) + " " + readScale(d.weight) + " 1"));
 
@@ -321,7 +320,7 @@ function processGraph() {
             var toWidth = masterScale(toN.w);
 
 
-            console.log(fromSpherical.radius, toSpherical.radius);
+            //console.log(fromSpherical.radius, toSpherical.radius);
 
             for (let i = 0; i < numberOfCurves; i++) {
                 let j = i * 3;
@@ -346,7 +345,7 @@ function processGraph() {
             renderCurve.points = tP;
         
             let length = renderCurve.getLength();
-            console.log("length", length*numberOfCurves);
+            //console.log("length", length*numberOfCurves);
 
             var tP = renderCurve.getSpacedPoints(length*200);
 
@@ -365,12 +364,12 @@ function processGraph() {
                 tP[i].z = cartesian.z;
             }
 
-            for (let i = 0; i < tP.length - 10; i++) {
+            for (let i = 3; i < tP.length - 10; i++) {
                 curvy_pathString += tP[i].x + ' ' + tP[i].y + ' ' + tP[i].z + ', ';
             }
             curvy_pathString += tP[tP.length - 9].x + ' ' + tP[tP.length - 9].y + ' ' + tP[tP.length - 9].z;
             curvyPaths[index] = curvy_pathString;
-            addTriangle(this, d, tP[tP.length - 9], tP[tP.length - 1]);
+            addTriangle(this, d, tP[tP.length - 9], tP[tP.length - 3]);
             return curvy_pathString;
         })
         .on("select", function (d) {
