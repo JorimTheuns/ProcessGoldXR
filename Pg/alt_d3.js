@@ -364,12 +364,12 @@ function processGraph() {
                 tP[i].z = cartesian.z;
             }
 
-            for (let i = 3; i < tP.length - 10; i++) {
+            for (let i = 5; i < tP.length - 9; i++) {
                 curvy_pathString += tP[i].x + ' ' + tP[i].y + ' ' + tP[i].z + ', ';
             }
-            curvy_pathString += tP[tP.length - 9].x + ' ' + tP[tP.length - 9].y + ' ' + tP[tP.length - 9].z;
+            curvy_pathString += tP[tP.length - 8].x + ' ' + tP[tP.length - 8].y + ' ' + tP[tP.length - 8].z;
             curvyPaths[index] = curvy_pathString;
-            addTriangle(this, d, tP[tP.length - 9], tP[tP.length - 3]);
+            addTriangle(this, d, tP[tP.length - 9], tP[tP.length - 5]);
             return curvy_pathString;
         })
         .on("select", function (d) {
