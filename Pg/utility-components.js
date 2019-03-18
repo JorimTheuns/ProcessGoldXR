@@ -412,17 +412,17 @@ AFRAME.registerComponent('plane-helper', {
 });
 
 AFRAME.registerComponent('desktop-only', {
-    tick: function () {
+    init: function () {
         var entity = this.el;
         if (AFRAME.utils.device.checkHeadsetConnected()) {
-            if (!AFRAME.utils.device.isMobile()){}
+            if (!AFRAME.utils.device.isMobile()){
             entity.parentNode.removeChild(entity);
         }}
     }
 });
 
 AFRAME.registerComponent('vr-only', {
-    tick: function () {
+    init: function () {
         var entity = this.el;
         if (!AFRAME.utils.device.checkHeadsetConnected()) {
             entity.parentNode.removeChild(entity);
@@ -431,7 +431,7 @@ AFRAME.registerComponent('vr-only', {
 });
 
 AFRAME.registerComponent('6dof-only', {
-    tick: function () {
+    init: function () {
         var entity = this.el;
         if (!AFRAME.utils.device.checkHeadsetConnected()) {
             entity.parentNode.removeChild(entity);
