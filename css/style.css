@@ -1,0 +1,291 @@
+@font-face {
+    font-family: "Nexa Bold";
+    src: url("https://github.com/teleject/artifactconf-site/blob/master/css-temp/fonts/nexa-bold.eot?raw=true") format("eot");
+    src: url("https://github.com/teleject/artifactconf-site/blob/master/css-temp/fonts/nexa-bold.woff?raw=true") format("woff");
+    src: url("https://github.com/teleject/artifactconf-site/blob/master/css-temp/fonts/nexa-bold.ttf?raw=true") format("truetype");
+    src: url("https://github.com/teleject/artifactconf-site/blob/master/css-temp/fonts/nexa-bold.ttf?raw=true") format("truetype");
+    src: url("fonts/Nexa-Bold.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "Nexa Light";
+    src: url("https://github.com/teleject/artifactconf-site/blob/master/css-temp/fonts/nexa-light.eot?raw=true") format("eot");
+    src: url("https://github.com/teleject/artifactconf-site/blob/master/css-temp/fonts/nexa-light.woff?raw=true") format("woff");
+    src: url("https://github.com/teleject/artifactconf-site/blob/master/css-temp/fonts/nexa-light.ttf?raw=true") format("truetype");
+    src: url("fonts/Nexa-Light.otf") format("opentype");
+}
+
+html,
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Nexa Light", sans-serif;
+}
+
+b {
+    font-family: "Nexa Bold", sans-serif;
+}
+
+a {
+    color: #1791d4;
+}
+
+iframe {
+    border-style: hidden;
+}
+
+.vr {
+    width: 100%;
+    height: 80%;
+}
+
+.fit-width {
+    max-width: 90%;
+}
+
+.intro-text {
+    padding: 24px;
+    width: 90%;
+    max-width: 1080px;
+}
+
+
+.overflow {
+    overflow: visible;
+    hyphens: auto;
+}
+
+
+
+.image-cell {
+    width: 80vw;
+}
+
+@media screen and (min-width: 601px) {
+    .image-cell {
+        width: 30vw;
+        max-width: 350px;
+    }
+}
+
+.w3-dodgerblue {
+    background-color: #1791d4;
+    color: white;
+}
+
+.w3-footer {
+    margin-top: 48px;
+}
+
+.my-header {
+    background-color: #1791d4;
+    width: calc((100vw - 1041px) / 2);
+}
+
+/*=== Trigger  ===*/
+.animate {
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+/*=== Optional Delays, change values here  ===*/
+.first {
+    -webkit-animation-delay: 1s;
+    -moz-animation-delay: 1s;
+    animation-delay: 1s;
+}
+
+.one {
+    -webkit-animation-delay: 1.4s;
+    -moz-animation-delay: 1.4s;
+    animation-delay: 1.4s;
+}
+
+.two {
+    -webkit-animation-delay: 1.6s;
+    -moz-animation-delay: 1.6s;
+    animation-delay: 1.6s;
+}
+
+.three {
+    -webkit-animation-delay: 1.8s;
+    -moz-animation-delay: 1.8s;
+    animation-delay: 1.8s;
+}
+
+.four {
+    -webkit-animation-delay: 3s;
+    -moz-animation-delay: 3s;
+    animation-delay: 3s;
+}
+
+/*=== Animations start here  ===*/
+/*=== FADE IN  ===*/
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.fadeIn {
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+}
+
+
+/*=== FADE IN DOWN ===*/
+@-webkit-keyframes fadeInDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, -100%, 0);
+        transform: translate3d(0, -100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInDown {
+    -webkit-animation-name: fadeInDown;
+    animation-name: fadeInDown;
+}
+
+/*==== FADE IN UP ===*/
+@-webkit-keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(0, 100%, 0);
+        transform: translate3d(0, 100%, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInUp {
+    -webkit-animation-name: fadeInUp;
+    animation-name: fadeInUp;
+}
+
+/*=== FADE IN LEFT ===*/
+@-webkit-keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInLeft {
+    -webkit-animation-name: fadeInLeft;
+    animation-name: fadeInLeft;
+}
+
+
+/*==== FADE IN RIGHT ===*/
+@-webkit-keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        -webkit-transform: translate3d(100%, 0, 0);
+        transform: translate3d(100%, 0, 0);
+    }
+
+    to {
+        opacity: 1;
+        -webkit-transform: none;
+        transform: none;
+    }
+}
+
+.fadeInRight {
+    -webkit-animation-name: fadeInRight;
+    animation-name: fadeInRight;
+}
