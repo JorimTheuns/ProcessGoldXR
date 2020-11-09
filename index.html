@@ -4,18 +4,18 @@
   <script src="https://rawgit.com/feiss/aframe-environment-component/master/dist/aframe-environment-component.min.js"></script>
   <script src="https://unpkg.com/aframe-forcegraph-component/dist/aframe-forcegraph-component.min.js"></script>
   <script src="converter.js"></script>
-  </head>
+</head>
 
 <body>
   <a-scene stats>
-    <a-entity environment></a-entity>
+    <!--<a-entity environment></a-entity>-->
     <a-entity id="camera" position="0 1.6 5">
-	<a-camera wasd-controls="fly: true; acceleration: 300">
+      <a-camera wasd-controls="fly: true; acceleration: 300">
         <a-cursor color="black" opacity="0.5"></a-cursor>
       </a-camera>
-	</a-entity>
-	<a-entity scale="0.5 0.5 0.5">
-    <a-entity pgvr="scaleFactor: 100" forcegraph='jsonUrl: miserables.json'></a-entity>
-	</a-entity>
+    </a-entity>
+    <a-entity scale="0.1 0.1 0.1">
+      <a-entity pgvr="scaleFactor: 1" forcegraph='jsonUrl: /JSON/complexdata.json'></a-entity>
+    </a-entity>
   </a-scene>
 </body>
